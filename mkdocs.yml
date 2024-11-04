@@ -1,10 +1,8 @@
 site_name: ranetkad
-site_url: !ENV ['https://w.ranetkad.ru']
-site_description: 
+site_url: https://w.ranetkad.ru
 site_author: ranetkad
 repo_url: https://github.com/ranetkad/wiki.ranetkad.ru
 
-site_name: ranetkad
 theme:
     name: material
     language: ru
@@ -14,16 +12,27 @@ theme:
         - navigation.instant
         - navigation.instant.prefetch
         - navigation.instant.progress
-        - navigation.tracking
+        - navigation.instant.preview
         - navigation.tabs
         - navigation.tabs.sticky
+        - navigation.sections
+        - navigation.tracking
         - navigation.footer
+        - navigation.path
+        - navigation.top
+        - toc.integrate
+        - search.suggest
+        - search.highlight
+        - content.tabs.link
+        - content.code.annotation
+        - content.code.copy
         - announce.dismiss
+        - search.highlight 
     font:
         code: "Fira Code"
         text: "Exo 2"
     palette:
-        - media: "(prefers-color-scheme)"
+        - media: "(prefers-color-scheme: no-preference)"
           toggle:
             icon: material/link
             name: Switch to light mode
@@ -41,7 +50,20 @@ theme:
           toggle:
             icon: material/toggle-switch-off
             name: Switch to system preference
-plugins:
-    - offline
-    - search
 
+plugins:
+    - search
+    - offline
+    - awesome-pages
+    - minify
+    - tags
+
+markdown_extensions:
+    - pymdownx.superfences:
+          custom_fences:
+            - name: mermaid
+              class: mermaid
+              format: !!python/name:pymdownx.superfences.fence_code_format
+    - admonition  
+    - pymdownx.superfences  
+    - pymdownx.highlight 
