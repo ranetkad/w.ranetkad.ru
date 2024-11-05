@@ -1,69 +1,91 @@
 site_name: ranetkad
-site_url: https://w.ranetkad.ru
+site_url: !ENV [SITE_URL, "https://w.ranetkad.ru"]
 site_author: ranetkad
 repo_url: https://github.com/ranetkad/wiki.ranetkad.ru
-
 theme:
-    name: material
-    language: ru
-    icon:
-        repo: fontawesome/brands/github-alt
-    features:
-        - navigation.instant
-        - navigation.instant.prefetch
-        - navigation.instant.progress
-        - navigation.instant.preview
-        - navigation.tabs
-        - navigation.tabs.sticky
-        - navigation.sections
-        - navigation.tracking
-        - navigation.footer
-        - navigation.path
-        - navigation.top
-        - toc.integrate
-        - search.suggest
-        - search.highlight
-        - content.tabs.link
-        - content.code.annotation
-        - content.code.copy
-        - announce.dismiss
-        - search.highlight 
-    font:
-        code: "Fira Code"
-        text: "Exo 2"
-    palette:
-        - media: "(prefers-color-scheme: no-preference)"
-          toggle:
-            icon: material/link
-            name: Switch to light mode
-        - media: "(prefers-color-scheme: light)"
-          scheme: default
-          primary: indigo
-          accent: indigo
-          toggle:
-            icon: material/toggle-switch
-            name: Switch to dark mode
-        - media: "(prefers-color-scheme: dark)"
-          scheme: slate
-          primary: black
-          accent: indigo
-          toggle:
-            icon: material/toggle-switch-off
-            name: Switch to system preference
+  name: material
+  language: ru
+  icon:
+    repo: fontawesome/brands/github-alt
+  features:
+    - navigation.path
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.instant.preview
+    - navigation.tracking
+    - navigation.footer
+    - navigation.top
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+    - announce.dismiss
+    - search.highlight
+  font:
+    code: "Fira Code"
+    text: "Exo 2"
+  palette:
+    - media: "(prefers-color-scheme: no-preference)"
+      toggle:
+        icon: material/link
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off
+        name: Switch to system preference
 
 plugins:
-    - search
-    - offline
-    - awesome-pages
-    - minify
-    - tags
+  - search
+  - offline
+  - awesome-pages
+  - minify
+  - offline
 
 markdown_extensions:
-    - pymdownx.superfences:
-          custom_fences:
-            - name: mermaid
-              class: mermaid
-              format: !!python/name:pymdownx.superfences.fence_code_format
-    - admonition  
-    - pymdownx.superfences  
-    - pymdownx.highlight 
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/telegram
+      link: https://t.me/ranetkad
+  generator: false

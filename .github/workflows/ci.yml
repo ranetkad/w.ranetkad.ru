@@ -25,6 +25,6 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material mkdocs-awesome-pages-plugin mkdocs-minify-plugin
-      - run: echo "w.ranetkad.ru" > CNAME 
+      - run: pip install -r requirements.txt
+      - run: echo "w.ranetkad.ru" > ./build/CNAME
       - run: mkdocs gh-deploy --force
