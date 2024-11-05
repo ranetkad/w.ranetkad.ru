@@ -52,7 +52,6 @@ plugins:
   - offline
   - awesome-pages
   - minify
-  - offline
 
 markdown_extensions:
   - abbr
