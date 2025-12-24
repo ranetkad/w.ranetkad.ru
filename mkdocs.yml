@@ -5,8 +5,8 @@ repo_url: https://github.com/ranetkad/wiki.ranetkad.ru
 theme:
   name: material
   language: ru
+  logo: assets/favicon.png
   icon:
-    logo: material/book-open-page-variant
     repo: fontawesome/brands/github-alt
   favicon: assets/favicon.png
   features:

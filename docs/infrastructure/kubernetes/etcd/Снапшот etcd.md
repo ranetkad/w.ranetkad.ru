@@ -1,5 +1,0 @@
-```
-
-etcdctl snapshot save file
-
-```
