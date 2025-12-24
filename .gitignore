@@ -28,3 +28,6 @@ Thumbs.db
 
 # Local config
 .cache/
+
+# Wiki prompt (personal)
+WIKI_PROMPT.md

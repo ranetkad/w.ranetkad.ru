@@ -1,4 +1,4 @@
-# OpenStack - CLI
+# CLI
 
 ## Коротко
 

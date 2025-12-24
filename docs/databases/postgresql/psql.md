@@ -1,4 +1,4 @@
-# PostgreSQL - psql
+# psql
 
 ## Коротко
 
