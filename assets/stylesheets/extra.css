@@ -1,0 +1,36 @@
+/* Минималистичный футер */
+.md-footer {
+  padding: 0.5rem 0;
+}
+
+.md-footer__inner {
+  padding: 0.5rem 0;
+}
+
+.md-footer-meta {
+  padding: 0.5rem 0;
+}
+
+/* Убираем лишние отступы в навигации футера */
+.md-footer__link {
+  padding: 0.5rem 0;
+}
+
+/* Уменьшаем текст в футере */
+.md-footer-meta__inner {
+  font-size: 0.7rem;
+}
+
+/* Компактная боковая навигация */
+.md-nav__item {
+  padding: 0;
+}
+
+.md-nav__link {
+  padding: 0.3rem 0.6rem;
+}
+
+/* Убираем жирность заголовков разделов */
+.md-nav__item--nested > .md-nav__link {
+  font-weight: 500;
+}
