@@ -22,8 +22,11 @@ theme:
     - content.tabs.link
     - content.code.annotation
     - content.code.copy
+    - content.code.select
     - announce.dismiss
-    - search.highlight
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
   font:
     code: "Fira Code"
     text: "Exo 2"
@@ -48,10 +51,16 @@ theme:
         name: Switch to system preference
 
 plugins:
-  - search
+  - search:
+      lang: ru
   - offline
   - awesome-pages
-  - minify
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: date
+  - tags
 
 markdown_extensions:
   - abbr
@@ -71,12 +80,20 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      auto_title: true
   - pymdownx.inlinehilite
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.smartsymbols
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
