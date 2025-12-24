@@ -6,7 +6,9 @@ theme:
   name: material
   language: ru
   icon:
+    logo: material/book-open-page-variant
     repo: fontawesome/brands/github-alt
+  favicon: assets/favicon.png
   features:
     - navigation.path
     - navigation.instant
@@ -24,9 +26,9 @@ theme:
     - content.code.copy
     - content.code.select
     - announce.dismiss
-    - navigation.tabs
     - navigation.sections
     - navigation.indexes
+    - navigation.expand
   font:
     code: "Fira Code"
     text: "Exo 2"
@@ -53,6 +55,7 @@ theme:
 plugins:
   - search:
       lang: ru
+      separator: '[\s\-\.]+'
   - offline
   - awesome-pages
   - minify:
@@ -61,6 +64,8 @@ plugins:
       enable_creation_date: true
       type: date
   - tags
+  - glightbox
+  - macros
 
 markdown_extensions:
   - abbr
