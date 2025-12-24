@@ -33,27 +33,51 @@
          <lastmod>2025-12-24</lastmod>
     </url>
     <url>
+         <loc>https://w.ranetkad.ru/networking/bgp/index.html</loc>
+         <lastmod>2025-12-24</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/bgp/advanced.html</loc>
+         <lastmod>2025-12-24</lastmod>
+    </url>
+    <url>
          <loc>https://w.ranetkad.ru/networking/bgp/attributes.html</loc>
          <lastmod>2025-12-24</lastmod>
     </url>
     <url>
-         <loc>https://w.ranetkad.ru/networking/bgp/basics.html</loc>
+         <loc>https://w.ranetkad.ru/networking/bgp/filtering.html</loc>
          <lastmod>2025-12-24</lastmod>
     </url>
     <url>
-         <loc>https://w.ranetkad.ru/networking/ovs/ovs.html</loc>
+         <loc>https://w.ranetkad.ru/networking/bgp/neighbors.html</loc>
          <lastmod>2025-12-24</lastmod>
     </url>
     <url>
-         <loc>https://w.ranetkad.ru/networking/tls/tls.html</loc>
+         <loc>https://w.ranetkad.ru/networking/bgp/nlri.html</loc>
          <lastmod>2025-12-24</lastmod>
     </url>
     <url>
-         <loc>https://w.ranetkad.ru/storage/ceph/Ceph.html</loc>
+         <loc>https://w.ranetkad.ru/networking/bgp/scaling.html</loc>
          <lastmod>2025-12-24</lastmod>
     </url>
     <url>
-         <loc>https://w.ranetkad.ru/storage/lvm/LVM.html</loc>
+         <loc>https://w.ranetkad.ru/networking/ovs/index.html</loc>
+         <lastmod>2025-12-24</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/tcp/index.html</loc>
+         <lastmod>2025-12-24</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/tls/index.html</loc>
+         <lastmod>2025-12-24</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/storage/ceph/index.html</loc>
+         <lastmod>2025-12-24</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/storage/lvm/index.html</loc>
          <lastmod>2025-12-24</lastmod>
     </url>
 </urlset>
