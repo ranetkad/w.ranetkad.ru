@@ -64,6 +64,8 @@ plugins:
   - tags
   - glightbox
   - macros
+  - pdf-export:
+      combined: true
 
 markdown_extensions:
   - abbr
