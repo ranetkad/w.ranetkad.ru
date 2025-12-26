@@ -72,7 +72,7 @@ ip link
 nsenter -t 1234 -n ip addr
 
 # войти во все namespaces контейнера
-nsenter -t $(docker inspect -f '{{.State.Pid}}' container_name) -a
+nsenter -t $(docker inspect -f '{% raw %}{{.State.Pid}}{% endraw %}' container_name) -a
 ```
 
 ## Network Namespace - пример
