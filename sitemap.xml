@@ -2,82 +2,134 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://w.ranetkad.ru/index.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/databases/postgresql/admin.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/databases/postgresql/psql.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/infrastructure/kubernetes/architecture.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/infrastructure/kubernetes/glossary.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/infrastructure/kubernetes/kubectl.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/infrastructure/openstack/cli.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/infrastructure/openstack/services.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/dpdk/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/ipvs/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/keepalived/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/namespaces/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/network-stack/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/network-stack/freebsd-vs-linux.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/numa/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/linux/ripe-atlas/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/bgp/index.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/bgp/advanced.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/bgp/attributes.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/bgp/filtering.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/bgp/neighbors.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/bgp/nlri.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/bgp/scaling.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/ipv6/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/ipv6/transition.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/nfv/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/ovs/index.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/segment-routing/index.html</loc>
+         <lastmod>2025-12-26</lastmod>
+    </url>
+    <url>
+         <loc>https://w.ranetkad.ru/networking/segment-routing/srv6.html</loc>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/tcp/index.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/networking/tls/index.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/storage/ceph/index.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
     <url>
          <loc>https://w.ranetkad.ru/storage/lvm/index.html</loc>
-         <lastmod>2025-12-24</lastmod>
+         <lastmod>2025-12-26</lastmod>
     </url>
 </urlset>
