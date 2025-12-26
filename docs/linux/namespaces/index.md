@@ -426,7 +426,7 @@ cat /proc/$$/attr/current
 
 ```bash
 # PID контейнера на хосте
-PID=$(docker inspect -f '{{.State.Pid}}' container_name)
+PID=$(docker inspect -f '{% raw %}{{.State.Pid}}{% endraw %}' container_name)
 
 # проверить всё
 ls -la /proc/$PID/ns/
