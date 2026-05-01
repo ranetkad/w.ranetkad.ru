@@ -1,5 +1,5 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – OpenStack</title><link>https://w.ranetkad.ru/infrastructure/openstack/</link><description>Recent content in OpenStack on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/infrastructure/openstack/index.xml" rel="self" type="application/rss+xml"/><item><title>CLI</title><link>https://w.ranetkad.ru/infrastructure/openstack/cli/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/infrastructure/openstack/cli/</guid><description>
-&lt;h1>CLI&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Unified CLI для OpenStack. Перед использованием нужно source keystonerc файла проекта.&lt;/p>
 &lt;h2>Команды&lt;span class="hx:absolute hx:-mt-20" id="команды">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Аутентификация:&lt;/p>
@@ -432,7 +432,7 @@ data-copied-label="Скопировано!"
 &lt;/button>
 &lt;/div>
 &lt;/div></description></item><item><title>Сервисы</title><link>https://w.ranetkad.ru/infrastructure/openstack/services/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/infrastructure/openstack/services/</guid><description>
-&lt;h1>Сервисы&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Основные сервисы OpenStack: порты, конфиги, логи. Быстрая справка.&lt;/p>
 &lt;h2>Keystone (Identity)&lt;span class="hx:absolute hx:-mt-20" id="keystone-identity">&lt;/span>
 &lt;a href="#keystone-identity" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Аутентификация и авторизация.&lt;/p>

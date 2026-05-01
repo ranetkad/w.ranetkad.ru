@@ -1,5 +1,5 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – BGP</title><link>https://w.ranetkad.ru/networking/bgp/</link><description>Recent content in BGP on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/networking/bgp/index.xml" rel="self" type="application/rss+xml"/><item><title>Анонсирование</title><link>https://w.ranetkad.ru/networking/bgp/nlri/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/bgp/nlri/</guid><description>
-&lt;h1>Анонсирование&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>NLRI (Network Layer Reachability Information) - префиксы, которые BGP анонсирует соседям.
 Два способа: явное объявление (network) и редистрибуция из других протоколов.&lt;/p>
 &lt;h2>network&lt;span class="hx:absolute hx:-mt-20" id="network">&lt;/span>
@@ -165,7 +165,7 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;/details></description></item><item><title>Атрибуты</title><link>https://w.ranetkad.ru/networking/bgp/attributes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/bgp/attributes/</guid><description>
-&lt;h1>Атрибуты&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Атрибуты определяют характеристики маршрута и влияют на выбор лучшего пути.
 Well-known (обязательные) vs Optional. Transitive (передаются дальше) vs Non-transitive.&lt;/p>
 &lt;h2>Классификация&lt;span class="hx:absolute hx:-mt-20" id="классификация">&lt;/span>
@@ -464,7 +464,7 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;/details></description></item><item><title>Дополнительно</title><link>https://w.ranetkad.ru/networking/bgp/advanced/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/bgp/advanced/</guid><description>
-&lt;h1>Дополнительно&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Multipath, communities, add-path, BFD, route refresh и другие фичи для production.&lt;/p>
 &lt;h2>Multipath&lt;span class="hx:absolute hx:-mt-20" id="multipath">&lt;/span>
 &lt;a href="#multipath" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Установка нескольких путей в RIB для балансировки. По умолчанию BGP ставит только лучший маршрут.&lt;/p>
@@ -877,7 +877,7 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;/details></description></item><item><title>Масштабирование</title><link>https://w.ranetkad.ru/networking/bgp/scaling/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/bgp/scaling/</guid><description>
-&lt;h1>Масштабирование&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Проблема iBGP: требуется full-mesh (n*(n-1)/2 сессий).
 Решения: Route Reflector, Confederation, peer-group/templates.&lt;/p>
 &lt;h2>Route Reflector&lt;span class="hx:absolute hx:-mt-20" id="route-reflector">&lt;/span>
@@ -1095,7 +1095,7 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;/details></description></item><item><title>Соседство</title><link>https://w.ranetkad.ru/networking/bgp/neighbors/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/bgp/neighbors/</guid><description>
-&lt;h1>Соседство&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>BGP-сессия устанавливается поверх TCP:179.
 Соседи обмениваются OPEN, согласовывают параметры, затем UPDATE с маршрутами.&lt;/p>
 &lt;h2>Типы сообщений&lt;span class="hx:absolute hx:-mt-20" id="типы-сообщений">&lt;/span>
@@ -1286,7 +1286,7 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;/details></description></item><item><title>Фильтрация</title><link>https://w.ranetkad.ru/networking/bgp/filtering/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/bgp/filtering/</guid><description>
-&lt;h1>Фильтрация&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Фильтрация контролирует какие маршруты принимать (import) и отдавать (export).
 Инструменты: prefix-list, as-path filter, route-map/policy.&lt;/p>
 &lt;h2>Prefix-list&lt;span class="hx:absolute hx:-mt-20" id="prefix-list">&lt;/span>
