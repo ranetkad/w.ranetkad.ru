@@ -38,35 +38,19 @@ hasCJKLanguage = false
 
 [menu]
   [[menu.main]]
-    name = "Networking"
-    pageRef = "/networking"
-    weight = 1
-  [[menu.main]]
-    name = "Linux"
-    pageRef = "/linux"
-    weight = 2
-  [[menu.main]]
-    name = "Storage"
-    pageRef = "/storage"
-    weight = 3
-  [[menu.main]]
-    name = "Glossary"
-    pageRef = "/glossary"
-    weight = 4
-  [[menu.main]]
     name = "Search"
-    weight = 5
+    weight = 1
     [menu.main.params]
       type = "search"
   [[menu.main]]
     name = "Telegram"
-    weight = 6
+    weight = 2
     url = "https://t.me/ranetkad"
     [menu.main.params]
       icon = "telegram"
   [[menu.main]]
     name = "GitHub"
-    weight = 7
+    weight = 3
     url = "https://github.com/ranetkad/wiki.ranetkad.ru"
     [menu.main.params]
       icon = "github"
