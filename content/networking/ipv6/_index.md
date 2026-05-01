@@ -48,7 +48,6 @@ tags:
 
 | Поле | Бит | Описание |
 |------|-----|----------|
-|---|---|---|
 | Version | 4 | Всегда 6 |
 | Traffic Class | 8 | Аналог ToS/DSCP |
 | Flow Label | 20 | Идентификатор потока для QoS |
@@ -68,7 +67,6 @@ tags:
 
 | Тип | ICMPv6 | Назначение |
 |-----|--------|------------|
-|---|---|---|
 | Router Solicitation (RS) | 133 | Хост ищет роутеры (dst: FF02::2) |
 | Router Advertisement (RA) | 134 | Роутер объявляет себя (dst: FF02::1) |
 | Neighbor Solicitation (NS) | 135 | Разрешение адреса (аналог ARP request) |
