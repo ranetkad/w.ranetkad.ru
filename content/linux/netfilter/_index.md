@@ -6,7 +6,7 @@ tags: [netfilter, iptables, nftables, conntrack, dataplane]
 
 ## Коротко
 
-Netfilter, подсистема ядра Linux для фильтрации, NAT и трекинга соединений. Hook-points в network stack PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING. Поверх hooks работают iptables (legacy), nftables (актуальный) и eBPF.
+Подсистема ядра для фильтрации, NAT и conntrack. Hook-points PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING. Поверх hooks работают iptables, nftables и eBPF.
 
 ## Hook order
 

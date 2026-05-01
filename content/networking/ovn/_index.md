@@ -6,7 +6,7 @@ tags: [ovn, ovs, sdn, dataplane]
 
 ## Коротко
 
-OVN (Open Virtual Network) - control plane поверх OVS для виртуальных сетей. OVS остается dataplane, OVN добавляет logical switch / logical router и распределенную программу flow.
+Control plane поверх OVS. OVS остается dataplane, OVN добавляет logical switch, logical router и distributed flows.
 
 ## Архитектура
 

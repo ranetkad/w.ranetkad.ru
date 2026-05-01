@@ -4,8 +4,6 @@ weight: 100
 toc: false
 ---
 
-Сокращения и термины из всех разделов wiki.
-
 ## Routing и control plane
 
 | Термин | Расшифровка |
@@ -85,7 +83,7 @@ toc: false
 | VF | Virtual Function (SR-IOV) |
 | PF | Physical Function (SR-IOV) |
 
-## Виртуализация и контейнеры
+## Hypervisor и containers
 
 | Термин | Расшифровка |
 | KVM | Kernel-based Virtual Machine |

@@ -6,7 +6,7 @@ tags: [tools, troubleshooting, tcpdump, ss]
 
 ## Коротко
 
-Утилиты для отладки и наблюдения за сетью в Linux. Cheatsheet наиболее частых сценариев.
+Cheatsheet утилит для отладки сети.
 
 ## tcpdump
 

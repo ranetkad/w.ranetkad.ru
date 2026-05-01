@@ -6,9 +6,9 @@ tags: [mpls, bgp, routing]
 
 ## Коротко
 
-Multiprotocol Label Switching - инкапсуляция с label stack между L2 и L3. Forwarding по меткам (LFIB), а не по IP. RFC 3031.
+RFC 3031. Label stack между L2 и L3. Forwarding по LFIB, а не по IP.
 
-Label - 20 бит, EXP - 3 (QoS), S - 1 (bottom-of-stack), TTL - 8.
+Label 20 бит, EXP 3 бит (QoS), S 1 бит (bottom-of-stack), TTL 8 бит.
 
 ## Сигналинг меток
 

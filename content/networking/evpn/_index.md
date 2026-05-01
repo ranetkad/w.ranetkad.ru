@@ -6,9 +6,9 @@ tags: [evpn, bgp, vxlan, dataplane]
 
 ## Коротко
 
-EVPN (Ethernet VPN, RFC 7432) - control plane на BGP для L2/L3 overlay сетей. Заменяет flood-and-learn в VXLAN: MAC/IP анонсируются через MP-BGP вместо BUM-traffic.
+Ethernet VPN, RFC 7432. Control plane на BGP для L2/L3 overlay. MAC/IP анонсируются через MP-BGP вместо flood-and-learn.
 
-Underlay - IP fabric (обычно eBGP unnumbered). Overlay - VXLAN (data plane), EVPN (control plane).
+Underlay - IP fabric, обычно eBGP unnumbered. Overlay - VXLAN или MPLS на data plane.
 
 ## Address family
 

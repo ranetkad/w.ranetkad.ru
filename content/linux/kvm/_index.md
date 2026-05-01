@@ -1,16 +1,16 @@
 ---
 title: "KVM"
 weight: 9
-tags: [kvm, libvirt, virtualization]
+tags: [kvm, qemu, libvirt]
 ---
 
 ## Коротко
 
-KVM (Kernel-based Virtual Machine) - гипервизор на базе Linux kernel. Использует Intel VT-x / AMD-V для аппаратной виртуализации CPU. Память виртуализируется через EPT/NPT.
+Гипервизор в Linux kernel. CPU через Intel VT-x / AMD-V, память через EPT/NPT.
 
-QEMU - userspace эмулятор, работает в паре с KVM (KVM делает CPU/memory, QEMU - device emulation, IO).
+QEMU делает device emulation и IO в userspace, KVM - CPU и memory в kernel.
 
-libvirt - управляющий слой поверх QEMU/KVM, единое API.
+libvirt - management layer поверх QEMU/KVM с единым API.
 
 ## Стек
 
