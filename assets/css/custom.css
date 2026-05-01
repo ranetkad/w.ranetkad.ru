@@ -77,10 +77,6 @@ body {
   letter-spacing: -0.005em;
 }
 
-a, button, [role="button"], summary, .hextra-card, .hextra-hamburger-menu {
-  cursor: url("/cursor-ranetka.svg") 6 2, pointer;
-}
-
 ::selection {
   background: var(--rk-sapphire-soft);
   color: var(--rk-sapphire-ink);
@@ -214,6 +210,18 @@ article h2:hover a.subheading-anchor,
 article h3:hover a.subheading-anchor,
 article h4:hover a.subheading-anchor {
   opacity: 0.5;
+}
+
+.hextra-nav-container-blur {
+  background: var(--rk-paper) !important;
+  box-shadow: 0 1px 0 var(--rk-line), 0 1px 2px rgba(20,22,26,0.02) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dark .hextra-nav-container-blur {
+  background: var(--rk-paper) !important;
+  box-shadow: 0 1px 0 var(--rk-line), inset 0 -1px 0 var(--rk-line) !important;
 }
 
 .hextra-card {
