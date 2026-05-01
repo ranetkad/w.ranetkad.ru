@@ -35,12 +35,12 @@
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
-&lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
-&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;h2>Термины&lt;span class="hx:absolute hx:-mt-20" id="термины">&lt;/span>
+&lt;a href="#%d1%82%d0%b5%d1%80%d0%bc%d0%b8%d0%bd%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
 &lt;thead>
 &lt;tr>
-&lt;th>Термин&lt;/th>
-&lt;th>Что это&lt;/th>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
 &lt;/tr>
 &lt;/thead>
 &lt;tbody>
@@ -66,7 +66,7 @@
 &lt;/tr>
 &lt;tr>
 &lt;td>VNI&lt;/td>
-&lt;td>VXLAN Network Identifier (24 бит)&lt;/td>
+&lt;td>VXLAN Network Identifier, 24 бит&lt;/td>
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
