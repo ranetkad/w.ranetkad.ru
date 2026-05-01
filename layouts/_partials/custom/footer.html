@@ -1,14 +1,9 @@
 {{- $context := .context -}}
-<div class="hx:flex hx:w-full hx:flex-col hx:sm:flex-row hx:justify-between hx:items-center hx:py-6 hx:gap-4">
-  <div class="hx:text-sm">
-    <a href="/" class="hx:font-semibold hx:hover:text-gray-900 hx:dark:hover:text-white">ranetkad</a>
-  </div>
-  <div class="hx:flex hx:items-center hx:gap-4">
-    <a href="https://t.me/ranetkad" target="_blank" rel="noopener noreferrer" title="Telegram" class="hx:hover:text-gray-900 hx:dark:hover:text-white">
-      {{- partial "utils/icon.html" (dict "name" "telegram" "attributes" `height=1.2em`) -}}
-    </a>
-    <a href="https://github.com/ranetkad" target="_blank" rel="noopener noreferrer" title="GitHub" class="hx:hover:text-gray-900 hx:dark:hover:text-white">
-      {{- partial "utils/icon.html" (dict "name" "github" "attributes" `height=1.2em`) -}}
-    </a>
-  </div>
+<div class="hx:flex hx:w-full hx:items-center hx:justify-center hx:py-4 hx:gap-5 hx:text-gray-400 hx:dark:text-gray-500">
+  <a href="https://t.me/ranetkad" target="_blank" rel="noopener noreferrer" title="Telegram" class="hx:hover:text-gray-700 hx:dark:hover:text-gray-200 hx:transition-colors">
+    {{- partial "utils/icon.html" (dict "name" "telegram" "attributes" `height=1em`) -}}
+  </a>
+  <a href="https://github.com/ranetkad" target="_blank" rel="noopener noreferrer" title="GitHub" class="hx:hover:text-gray-700 hx:dark:hover:text-gray-200 hx:transition-colors">
+    {{- partial "utils/icon.html" (dict "name" "github" "attributes" `height=1em`) -}}
+  </a>
 </div>
