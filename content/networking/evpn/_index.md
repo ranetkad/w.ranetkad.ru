@@ -24,16 +24,16 @@ AFI 25 (L2VPN), SAFI 70 (EVPN).
 | 4 | Ethernet Segment, multi-homing DF election |
 | 5 | IP Prefix Route (L3VPN-like) |
 
-## Базовые сущности
+## Термины
 
-| Термин | Что это |
+| | |
 |---|---|
 | RD | Route Distinguisher, делает префикс уникальным в BGP |
 | RT | Route Target, политика import/export между VRF/EVI |
 | EVI | EVPN Instance |
 | ESI | Ethernet Segment Identifier |
 | VTEP | VXLAN Tunnel Endpoint |
-| VNI | VXLAN Network Identifier (24 бит) |
+| VNI | VXLAN Network Identifier, 24 бит |
 
 ## Сценарии
 

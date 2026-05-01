@@ -24,11 +24,11 @@ QEMU (vCPU threads, devices)
 hardware (VT-x/AMD-V, EPT/NPT, IOMMU)
 ```
 
-## Базовые сущности
+## Термины
 
-| Термин | Что |
+| | |
 |---|---|
-| domain | виртуальная машина в терминах libvirt |
+| domain | VM в терминах libvirt |
 | vCPU | поток QEMU привязанный к KVM_RUN ioctl |
 | virtio | paravirtual device interface (net, block, scsi, fs) |
 | vhost | offload virtio в kernel (vhost-net, vhost-scsi) |

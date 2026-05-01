@@ -20,9 +20,9 @@ ovn-nbctl -> OVN Northbound DB (logical: switches, routers, ACLs)
 ovs-vsctl -> ovn-controller (на каждом hypervisor) -> OVS flows
 ```
 
-## Базовые сущности
+## Термины
 
-| Термин | Что |
+| | |
 |---|---|
 | Logical Switch | виртуальный L2 segment, multi-host |
 | Logical Router | distributed router, logical |
