@@ -17,6 +17,7 @@ AFI 25 (L2VPN), SAFI 70 (EVPN).
 ## Route types
 
 | Type | Назначение |
+|---|---|
 | 1 | Ethernet Auto-Discovery, multi-homing |
 | 2 | MAC/IP Advertisement |
 | 3 | Inclusive Multicast Ethernet Tag (BUM, replication list) |
@@ -26,6 +27,7 @@ AFI 25 (L2VPN), SAFI 70 (EVPN).
 ## Базовые сущности
 
 | Термин | Что это |
+|---|---|
 | RD | Route Distinguisher, делает префикс уникальным в BGP |
 | RT | Route Target, политика import/export между VRF/EVI |
 | EVI | EVPN Instance |
@@ -36,6 +38,7 @@ AFI 25 (L2VPN), SAFI 70 (EVPN).
 ## Сценарии
 
 | Сценарий | Что |
+|---|---|
 | L2VNI | bridging одного broadcast domain через fabric |
 | L3VNI | routing между VRF поверх fabric |
 | Symmetric IRB | route-and-bridge симметричный, маршрутизация на ingress и egress VTEP |

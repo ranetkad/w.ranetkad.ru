@@ -27,6 +27,7 @@ hardware (VT-x/AMD-V, EPT/NPT, IOMMU)
 ## Базовые сущности
 
 | Термин | Что |
+|---|---|
 | domain | виртуальная машина в терминах libvirt |
 | vCPU | поток QEMU привязанный к KVM_RUN ioctl |
 | virtio | paravirtual device interface (net, block, scsi, fs) |

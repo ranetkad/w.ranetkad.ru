@@ -13,6 +13,7 @@ Label 20 бит, EXP 3 бит (QoS), S 1 бит (bottom-of-stack), TTL 8 бит.
 ## Сигналинг меток
 
 | Протокол | Что делает |
+|---|---|
 | LDP | hop-by-hop signaling, простой, RFC 5036 |
 | RSVP-TE | TE-туннели с резервированием, RFC 3209 |
 | BGP-LU | labeled unicast, RFC 8277, для inter-AS L3VPN и SR-MPLS |
@@ -21,6 +22,7 @@ Label 20 бит, EXP 3 бит (QoS), S 1 бит (bottom-of-stack), TTL 8 бит.
 ## Reserved labels
 
 | Label | Имя | Смысл |
+|---|---|---|
 | 0 | Explicit NULL IPv4 | PHP off, get IPv4 |
 | 1 | Router Alert | |
 | 2 | Explicit NULL IPv6 | |
@@ -29,6 +31,7 @@ Label 20 бит, EXP 3 бит (QoS), S 1 бит (bottom-of-stack), TTL 8 бит.
 ## Применения
 
 | Применение | Что |
+|---|---|
 | L3VPN | VPNv4/VPNv6 с PE-CE, RFC 4364 |
 | L2VPN | VPLS и EVPN over MPLS |
 | TE | explicit paths, FRR |

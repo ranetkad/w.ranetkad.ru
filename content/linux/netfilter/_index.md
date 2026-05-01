@@ -19,6 +19,7 @@ local -> OUTPUT -> [routing] -> POSTROUTING -> egress
 ## iptables vs nftables
 
 | Аспект | iptables | nftables |
+|---|---|---|
 | backend | x_tables | nf_tables |
 | таблицы | filter, nat, mangle, raw, security | произвольные, named |
 | family | один на v4 (ip6tables на v6) | inet, ip, ip6, arp, bridge, netdev |
@@ -33,6 +34,7 @@ local -> OUTPUT -> [routing] -> POSTROUTING -> egress
 States. NEW, ESTABLISHED, RELATED, INVALID, UNTRACKED.
 
 | sysctl | Что |
+|---|---|
 | `net.netfilter.nf_conntrack_max` | размер таблицы |
 | `net.netfilter.nf_conntrack_tcp_timeout_established` | дефолт 5 дней |
 | `net.netfilter.nf_conntrack_buckets` | bucket count для hashtable |

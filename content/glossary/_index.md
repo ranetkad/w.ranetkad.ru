@@ -7,6 +7,7 @@ toc: false
 ## Routing и control plane
 
 | Термин | Расшифровка |
+|---|---|
 | AS | Autonomous System |
 | ASN | AS Number |
 | AFI | Address Family Identifier |
@@ -35,6 +36,7 @@ toc: false
 ## Overlay и L2VPN
 
 | Термин | Расшифровка |
+|---|---|
 | EVPN | Ethernet VPN, RFC 7432 |
 | EVI | EVPN Instance |
 | ESI | Ethernet Segment Identifier |
@@ -51,6 +53,7 @@ toc: false
 ## Segment Routing и MPLS
 
 | Термин | Расшифровка |
+|---|---|
 | SR | Segment Routing, RFC 8402 |
 | SR-MPLS | SR на data plane MPLS, RFC 8660 |
 | SRv6 | SR на data plane IPv6, RFC 8754 |
@@ -66,6 +69,7 @@ toc: false
 ## Linux dataplane
 
 | Термин | Расшифровка |
+|---|---|
 | NAPI | New API, polling в Linux network drivers |
 | GRO | Generic Receive Offload |
 | GSO | Generic Segmentation Offload |
@@ -86,6 +90,7 @@ toc: false
 ## Hypervisor и containers
 
 | Термин | Расшифровка |
+|---|---|
 | KVM | Kernel-based Virtual Machine |
 | QEMU | Quick Emulator |
 | virtio | paravirtual device interface |
@@ -101,6 +106,7 @@ toc: false
 ## Kubernetes
 
 | Термин | Расшифровка |
+|---|---|
 | CNI | Container Network Interface |
 | CRI | Container Runtime Interface |
 | CSI | Container Storage Interface |
@@ -113,6 +119,7 @@ toc: false
 ## Storage
 
 | Термин | Расшифровка |
+|---|---|
 | OSD | Object Storage Daemon (Ceph) |
 | MON | Monitor (Ceph) |
 | MGR | Manager (Ceph) |
@@ -128,6 +135,7 @@ toc: false
 ## L4 и HA
 
 | Термин | Расшифровка |
+|---|---|
 | VRRP | Virtual Router Redundancy Protocol, RFC 5798 |
 | IPVS | IP Virtual Server |
 | LVS | Linux Virtual Server |
@@ -142,6 +150,7 @@ toc: false
 ## Транспорт
 
 | Термин | Расшифровка |
+|---|---|
 | MTU | Maximum Transmission Unit |
 | MSS | Maximum Segment Size |
 | BBR | Bottleneck Bandwidth and RTT (TCP CC) |

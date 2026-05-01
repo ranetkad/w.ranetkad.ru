@@ -23,6 +23,7 @@ ovs-vsctl -> ovn-controller (на каждом hypervisor) -> OVS flows
 ## Базовые сущности
 
 | Термин | Что |
+|---|---|
 | Logical Switch | виртуальный L2 segment, multi-host |
 | Logical Router | distributed router, logical |
 | Chassis | hypervisor с ovn-controller |
