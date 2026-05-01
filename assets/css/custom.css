@@ -212,16 +212,25 @@ article h4:hover a.subheading-anchor {
   opacity: 0.5;
 }
 
-.hextra-nav-container-blur {
-  background: var(--rk-paper) !important;
-  box-shadow: 0 1px 0 var(--rk-line), 0 1px 2px rgba(20,22,26,0.02) !important;
+body .hextra-nav-container-blur,
+html .hextra-nav-container-blur {
+  background-color: rgba(250, 250, 247, 0.85) !important;
+  background-image: none !important;
+  box-shadow: 0 1px 0 var(--rk-line), 0 1px 2px rgba(20, 22, 26, 0.02) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
-.dark .hextra-nav-container-blur {
-  background: var(--rk-paper) !important;
+body.dark .hextra-nav-container-blur,
+html.dark .hextra-nav-container-blur,
+.dark body .hextra-nav-container-blur {
+  background-color: rgba(14, 15, 18, 0.85) !important;
+  background-image: none !important;
   box-shadow: 0 1px 0 var(--rk-line), inset 0 -1px 0 var(--rk-line) !important;
+}
+
+body .hextra-nav-container {
+  background-color: transparent !important;
 }
 
 .hextra-card {
