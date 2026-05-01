@@ -27,6 +27,9 @@ hasCJKLanguage = false
         block = [['\[', '\]'], ['$$', '$$']]
         inline = [['\(', '\)']]
 
+[taxonomies]
+  tag = "tags"
+
 [languages]
   [languages.ru]
     languageName = "Русский"

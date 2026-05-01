@@ -1,5 +1,9 @@
 ---
-title: "SRv6"
+title: SRv6
+tags:
+- segment-routing
+- mpls
+- srv6
 ---
 
 ## Коротко

@@ -1,5 +1,7 @@
 ---
-title: "CLI"
+title: CLI
+tags:
+- openstack
 ---
 
 ## Коротко

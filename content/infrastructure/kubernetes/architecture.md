@@ -1,5 +1,7 @@
 ---
-title: "Архитектура"
+title: Архитектура
+tags:
+- kubernetes
 ---
 
 ## Коротко
@@ -46,3 +48,9 @@ etcdctl snapshot save backup.db
 ```bash
 etcdctl snapshot restore backup.db
 ```
+
+## See also
+
+- [Namespaces](/linux/namespaces/)
+- [Network stack](/linux/network-stack/)
+- [OVN](/networking/ovn/)

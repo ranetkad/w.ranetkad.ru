@@ -1,6 +1,10 @@
 ---
-title: "Keepalived"
+title: Keepalived
 weight: 5
+tags:
+- keepalived
+- vrrp
+- ha
 ---
 
 ## Коротко
@@ -312,3 +316,7 @@ Methods (`lvs_method`):
 3. Остановить keepalived на master: `systemctl stop keepalived`
 4. `ip addr show` на backup - VIP должен появиться
 5. `tcpdump -i eth0 proto 112` - должны идти VRRP пакеты
+
+## See also
+
+- [IPVS](/linux/ipvs/)

@@ -1,5 +1,9 @@
 ---
-title: "Соседство"
+title: Соседство
+tags:
+- bgp
+- routing
+- control-plane
 ---
 
 ## Коротко

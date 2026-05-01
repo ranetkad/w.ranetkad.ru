@@ -1,6 +1,9 @@
 ---
-title: "IPVS"
+title: IPVS
 weight: 6
+tags:
+- ipvs
+- lb
 ---
 
 ## Коротко
@@ -204,3 +207,8 @@ ipvsadm -ln
 ipvsadm -lnc
 ```
 Активные соединения.
+
+## See also
+
+- [netfilter](/linux/netfilter/)
+- [Keepalived](/linux/keepalived/)

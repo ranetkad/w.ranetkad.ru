@@ -1,16 +1,19 @@
 ---
-title: "Ceph"
+title: Ceph
 weight: 1
+tags:
+- ceph
+- storage
 ---
 
 ## TL;DR
 
-Программно-определяемое распределённое хранилище. Даёт block (RBD), object (S3/Swift) и file (CephFS) storage из одного кластера.
+Программно-определяемое распределенное хранилище. Дает block (RBD), object (S3/Swift) и file (CephFS) storage из одного кластера.
 
-- OSD (Object Storage Daemon) — хранит данные на дисках
-- MON (Monitor) — следит за состоянием кластера, хранит карту
-- MGR (Manager) — метрики, дашборд, балансировка
-- MDS (Metadata Server) — только для CephFS
+- OSD (Object Storage Daemon) - хранит данные на дисках
+- MON (Monitor) - следит за состоянием кластера, хранит карту
+- MGR (Manager) - метрики, дашборд, балансировка
+- MDS (Metadata Server) - только для CephFS
 
 ## Пакеты и пути
 
@@ -33,7 +36,7 @@ ceph health detail
 ```bash
 ceph osd tree
 ```
-Дерево OSD — какие диски на каких хостах, статус up/down.
+Дерево OSD - какие диски на каких хостах, статус up/down.
 
 ```bash
 ceph df
@@ -93,7 +96,7 @@ ceph orch daemon restart osd.0
 ```bash
 ceph health
 ```
-Быстрая проверка — HEALTH_OK значит всё ок.
+Быстрая проверка - HEALTH_OK значит все ок.
 
 ```bash
 ceph osd stat
@@ -108,6 +111,6 @@ ceph pg stat
 ## Подводные камни
 
 - Минимум 3 MON для кворума
-- PG count влияет на производительность — слишком мало или много = проблемы
-- При падении OSD данные ребалансируются — нагрузка на сеть
+- PG count влияет на производительность - слишком мало или много = проблемы
+- При падении OSD данные ребалансируются - нагрузка на сеть
 - `ceph osd pool delete` требует подтверждения дважды (защита от случайного удаления)

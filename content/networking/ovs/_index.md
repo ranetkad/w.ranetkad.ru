@@ -1,6 +1,10 @@
 ---
-title: "OVS"
+title: OVS
 weight: 3
+tags:
+- ovs
+- sdn
+- dataplane
 ---
 
 ## Коротко
@@ -116,3 +120,9 @@ ovs-appctl bridge/dump-flows br0
 ```
 
 Flows включая скрытые.
+
+## See also
+
+- [OVN](/networking/ovn/)
+- [NFV](/networking/nfv/)
+- [DPDK](/linux/dpdk/)

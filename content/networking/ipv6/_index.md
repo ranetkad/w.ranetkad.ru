@@ -1,6 +1,8 @@
 ---
-title: "IPv6"
+title: IPv6
 weight: 5
+tags:
+- ipv6
 ---
 
 ## Коротко

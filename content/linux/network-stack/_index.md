@@ -1,6 +1,9 @@
 ---
-title: "Network stack"
+title: Network stack
 weight: 1
+tags:
+- network-stack
+- kernel
 ---
 
 ## Коротко
@@ -332,3 +335,9 @@ ethtool -C eth0 rx-usecs 0 rx-frames 1
 # Или адаптивный
 ethtool -C eth0 adaptive-rx on
 ```
+
+## See also
+
+- [TCP](/networking/tcp/)
+- [DPDK](/linux/dpdk/)
+- [netfilter](/linux/netfilter/)

@@ -1,5 +1,8 @@
 ---
-title: "psql"
+title: psql
+tags:
+- postgresql
+- database
 ---
 
 ## Коротко

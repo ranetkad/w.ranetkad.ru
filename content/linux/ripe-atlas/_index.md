@@ -1,6 +1,9 @@
 ---
-title: "RIPE Atlas"
+title: RIPE Atlas
 weight: 7
+tags:
+- ripe-atlas
+- monitoring
 ---
 
 ## Коротко

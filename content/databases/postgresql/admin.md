@@ -1,5 +1,8 @@
 ---
-title: "Администрирование"
+title: Администрирование
+tags:
+- postgresql
+- database
 ---
 
 ## Коротко

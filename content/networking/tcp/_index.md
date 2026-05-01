@@ -1,6 +1,9 @@
 ---
-title: "TCP"
+title: TCP
 weight: 7
+tags:
+- tcp
+- network-stack
 ---
 
 ## Коротко
@@ -192,3 +195,8 @@ net.ipv4.tcp_keepalive_probes = 5
 ```
 
 Применить: `sysctl -p`
+
+## See also
+
+- [Network stack](/linux/network-stack/)
+- [netfilter](/linux/netfilter/)

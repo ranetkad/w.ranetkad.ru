@@ -1,6 +1,10 @@
 ---
-title: "DPDK"
+title: DPDK
 weight: 3
+tags:
+- dpdk
+- dataplane
+- performance
 ---
 
 ## Коротко
@@ -166,3 +170,10 @@ DPDK учитывает NUMA топологию:
 **AF_XDP** - сокеты с zero-copy из XDP в userspace. Компромисс между DPDK и ядром.
 
 **Netmap** - похожий на DPDK подход, но менее распространен.
+
+## See also
+
+- [NUMA](/linux/numa/)
+- [Network stack](/linux/network-stack/)
+- [OVS](/networking/ovs/)
+- [KVM](/linux/kvm/)

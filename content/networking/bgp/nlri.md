@@ -1,5 +1,9 @@
 ---
-title: "Анонсирование"
+title: Анонсирование
+tags:
+- bgp
+- routing
+- control-plane
 ---
 
 ## Коротко

@@ -1,5 +1,9 @@
 ---
-title: "Дополнительно"
+title: Дополнительно
+tags:
+- bgp
+- routing
+- control-plane
 ---
 
 ## Коротко

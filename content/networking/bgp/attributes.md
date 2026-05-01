@@ -1,5 +1,9 @@
 ---
-title: "Атрибуты"
+title: Атрибуты
+tags:
+- bgp
+- routing
+- control-plane
 ---
 
 ## Коротко

@@ -1,5 +1,7 @@
 ---
-title: "Сервисы"
+title: Сервисы
+tags:
+- openstack
 ---
 
 ## Коротко

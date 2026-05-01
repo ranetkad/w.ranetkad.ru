@@ -1,6 +1,9 @@
 ---
-title: "NUMA"
+title: NUMA
 weight: 4
+tags:
+- numa
+- performance
 ---
 
 ## Коротко

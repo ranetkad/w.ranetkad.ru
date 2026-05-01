@@ -1,6 +1,10 @@
 ---
-title: "Segment Routing"
+title: Segment Routing
 weight: 4
+tags:
+- segment-routing
+- mpls
+- srv6
 ---
 
 ## Коротко
@@ -288,3 +292,9 @@ SR совместим с LDP. Варианты миграции:
 - RFC 9862 - PCEP Extensions for SR Policy Candidate Paths
 - RFC 9855 - TI-LFA using Segment Routing
 - RFC 8986 - SRv6 Network Programming
+
+## See also
+
+- [BGP](/networking/bgp/)
+- [MPLS](/networking/mpls/)
+- [EVPN](/networking/evpn/)

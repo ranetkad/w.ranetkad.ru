@@ -1,5 +1,7 @@
 ---
-title: "kubectl"
+title: kubectl
+tags:
+- kubernetes
 ---
 
 ## Коротко

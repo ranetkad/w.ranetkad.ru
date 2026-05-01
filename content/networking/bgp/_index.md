@@ -1,6 +1,10 @@
 ---
-title: "BGP"
+title: BGP
 weight: 1
+tags:
+- bgp
+- routing
+- control-plane
 ---
 
 ## Коротко
@@ -70,3 +74,9 @@ Multiprotocol BGP (RFC 4760) - расширение для поддержки р
 9. Oldest route
 10. Lowest Router ID
 11. Lowest neighbor IP
+
+## See also
+
+- [EVPN](/networking/evpn/)
+- [MPLS](/networking/mpls/)
+- [Segment Routing](/networking/segment-routing/)

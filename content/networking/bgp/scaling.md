@@ -1,5 +1,9 @@
 ---
-title: "Масштабирование"
+title: Масштабирование
+tags:
+- bgp
+- routing
+- control-plane
 ---
 
 ## Коротко

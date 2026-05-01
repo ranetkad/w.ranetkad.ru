@@ -1,5 +1,8 @@
 ---
-title: "FreeBSD vs Linux"
+title: FreeBSD vs Linux
+tags:
+- network-stack
+- kernel
 ---
 
 ## Коротко
@@ -18,7 +21,7 @@ FreeBSD использует цепочки mbuf (256 байт) + кластер
 
 epoll раздражает тем, что на каждое изменение fd нужен отдельный epoll_ctl(). 100 сокетов поменялось - 100 syscalls.
 
-kqueue делает всё через один kevent() - и регистрация, и получение событий. Меньше syscalls = меньше overhead.
+kqueue делает все через один kevent() - и регистрация, и получение событий. Меньше syscalls = меньше overhead.
 
 Еще kqueue нормально работает с disk I/O через EVFILT_AIO. В Linux epoll на файлах бесполезен - файл "всегда ready", а реально блокируется на чтении с диска.
 

@@ -1,5 +1,9 @@
 ---
-title: "Фильтрация"
+title: Фильтрация
+tags:
+- bgp
+- routing
+- control-plane
 ---
 
 ## Коротко

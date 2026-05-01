@@ -1,5 +1,7 @@
 ---
-title: "Transition"
+title: Transition
+tags:
+- ipv6
 ---
 
 ## Коротко
