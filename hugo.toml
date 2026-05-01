@@ -78,7 +78,7 @@ hasCJKLanguage = false
     displayToggle = true
 
   [params.footer]
-    enable = true
+    enable = false
     displayCopyright = false
     displayPoweredBy = false
 
