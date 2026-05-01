@@ -1,7 +1,7 @@
-# MkDocs build output
-site/
+public/
+resources/
+.hugo_build.lock
 
-# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -12,22 +12,17 @@ venv/
 env/
 .env
 
-# IDE
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Logs
 *.log
 
-# Local config
 .cache/
 
-# Wiki prompt (personal)
 WIKI_PROMPT.md

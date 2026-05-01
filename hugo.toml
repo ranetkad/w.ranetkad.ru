@@ -1,0 +1,92 @@
+baseURL = "https://w.ranetkad.ru/"
+title = "ranetkad"
+theme = "hextra"
+
+defaultContentLanguage = "ru"
+enableRobotsTXT = true
+enableGitInfo = true
+enableInlineShortcodes = true
+hasCJKLanguage = false
+
+[outputs]
+  home = ["html"]
+  page = ["html"]
+  section = ["html", "rss"]
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    lineNos = true
+    lineNumbersInTable = true
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block = [['\[', '\]'], ['$$', '$$']]
+        inline = [['\(', '\)']]
+
+[languages]
+  [languages.ru]
+    languageName = "Русский"
+    weight = 1
+    title = "ranetkad"
+
+[menu]
+  [[menu.main]]
+    name = "Search"
+    weight = 1
+    [menu.main.params]
+      type = "search"
+  [[menu.main]]
+    name = "GitHub"
+    weight = 2
+    url = "https://github.com/ranetkad/wiki.ranetkad.ru"
+    [menu.main.params]
+      icon = "github"
+
+[params]
+  description = "Personal technical wiki"
+
+  [params.navbar]
+    displayTitle = true
+    displayLogo = false
+    width = "wide"
+
+  [params.theme]
+    default = "system"
+    displayToggle = true
+
+  [params.footer]
+    enable = true
+    displayCopyright = false
+    displayPoweredBy = false
+
+  displayUpdatedDate = true
+  dateFormat = "2006-01-02"
+
+  [params.search]
+    enable = true
+    type = "flexsearch"
+    [params.search.flexsearch]
+      index = "content"
+      tokenize = "forward"
+
+  [params.editURL]
+    enable = false
+
+  [params.toc]
+    displayTags = false
+
+  [params.highlight.copy]
+    enable = true
+    display = "hover"
+
+  [params.page]
+    width = "wide"
+    [params.page.contextMenu]
+      enable = false
+
+  [params.comments]
+    enable = false

@@ -1,13 +1,8 @@
-name: Deploy MkDocs
+name: Deploy Hugo
 
 on:
   push:
     branches: [main]
-    paths:
-      - 'docs/**'
-      - 'mkdocs.yml'
-      - 'requirements.txt'
-      - '.github/workflows/ci.yml'
   workflow_dispatch:
 
 permissions:
@@ -20,24 +15,26 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.146.7
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: recursive
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: peaceiris/actions-hugo@v3
         with:
-          python-version: '3.12'
-          cache: 'pip'
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - run: hugo --minify --gc
 
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Build & Deploy
-        run: mkdocs gh-deploy --force
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          cname: w.ranetkad.ru
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
