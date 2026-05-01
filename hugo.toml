@@ -91,3 +91,9 @@ hasCJKLanguage = false
 
   [params.comments]
     enable = false
+
+  [params.math]
+    enable = true
+
+  [params.mermaid]
+    enable = true
