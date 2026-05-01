@@ -1,0 +1,44 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Network stack</title><link>https://w.ranetkad.ru/linux/network-stack/</link><description>Recent content in Network stack on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/linux/network-stack/index.xml" rel="self" type="application/rss+xml"/><item><title>FreeBSD vs Linux</title><link>https://w.ranetkad.ru/linux/network-stack/freebsd-vs-linux/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/linux/network-stack/freebsd-vs-linux/</guid><description>
+&lt;h1>FreeBSD vs Linux&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Netflix гонит 400Gb/s с одного сервера на FreeBSD. Почему не Linux? sendfile + KTLS в ядре дают zero-copy до самого NIC. В Linux данные копируются для TLS шифрования в nginx.&lt;/p>
+&lt;h2>Буферы: mbuf vs sk_buff&lt;span class="hx:absolute hx:-mt-20" id="буферы-mbuf-vs-sk_buff">&lt;/span>
+&lt;a href="#%d0%b1%d1%83%d1%84%d0%b5%d1%80%d1%8b-mbuf-vs-sk_buff" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Linux пошел по пути &amp;ldquo;один пакет = один линейный буфер&amp;rdquo;. Проще, меньше pointer chasing, многие операции быстрее. Минус - иногда резервируется лишняя память.&lt;/p>
+&lt;p>FreeBSD использует цепочки mbuf (256 байт) + кластеры (2K/4K/9K). Гибче под разные размеры, но нужен m_pullup() чтобы собрать заголовки в непрерывный блок.&lt;/p>
+&lt;p>На практике разница не критична для большинства задач.&lt;/p>
+&lt;h2>kqueue vs epoll&lt;span class="hx:absolute hx:-mt-20" id="kqueue-vs-epoll">&lt;/span>
+&lt;a href="#kqueue-vs-epoll" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>epoll раздражает тем, что на каждое изменение fd нужен отдельный epoll_ctl(). 100 сокетов поменялось - 100 syscalls.&lt;/p>
+&lt;p>kqueue делает всё через один kevent() - и регистрация, и получение событий. Меньше syscalls = меньше overhead.&lt;/p>
+&lt;p>Еще kqueue нормально работает с disk I/O через EVFILT_AIO. В Linux epoll на файлах бесполезен - файл &amp;ldquo;всегда ready&amp;rdquo;, а реально блокируется на чтении с диска.&lt;/p>
+&lt;p>Источник: &lt;a href="https://thamizhelango.medium.com/freebsd-kqueue-vs-linux-epoll-why-kqueue-often-outperforms-and-its-impact-on-network-1ae39afb6e16"target="_blank" rel="noopener">kqueue vs epoll&lt;/a>&lt;/p>
+&lt;h2>sendfile - вот где разница&lt;span class="hx:absolute hx:-mt-20" id="sendfile---вот-где-разница">&lt;/span>
+&lt;a href="#sendfile---%d0%b2%d0%be%d1%82-%d0%b3%d0%b4%d0%b5-%d1%80%d0%b0%d0%b7%d0%bd%d0%b8%d1%86%d0%b0" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>FreeBSD sendfile делает share страниц между buffer cache и mbuf. Данные с диска попадают в cache, оттуда страницы расшариваются до самого NIC. Копирования нет.&lt;/p>
+&lt;p>Плюс он асинхронный - возвращает success до завершения disk I/O. Данные дописываются в сокет позже, порядок сохраняется.&lt;/p>
+&lt;p>Linux sendfile тоже zero-copy, но когда нужен TLS - nginx читает данные в userspace, шифрует, отдает обратно в ядро. Вот тут копирование.&lt;/p>
+&lt;h2>Почему Netflix на FreeBSD&lt;span class="hx:absolute hx:-mt-20" id="почему-netflix-на-freebsd">&lt;/span>
+&lt;a href="#%d0%bf%d0%be%d1%87%d0%b5%d0%bc%d1%83-netflix-%d0%bd%d0%b0-freebsd" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Изначально выбрали потому что TCP/IP стек показывал меньше latency. Потом вложили кучу работы в оптимизации - уходить уже глупо.&lt;/p>
+&lt;p>Главная фишка - KTLS. TLS шифрование перенесли из nginx в ядро. sendfile pipeline сохраняется:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>Без KTLS: Disk -&amp;gt; Cache -&amp;gt; nginx (encrypt) -&amp;gt; Kernel -&amp;gt; NIC
+С KTLS: Disk -&amp;gt; Cache -&amp;gt; Kernel (encrypt) -&amp;gt; NIC&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>В 2022 добавили NIC kTLS offload - шифрование на сетевухе. CPU вообще не трогает данные.&lt;/p>
+&lt;p>Железо для 200Gb/s сервера: AMD EPYC 7502P, 256GB RAM, 4x100GbE Mellanox, 18 NVMe дисков. 200Gb/s это 25GB/s, нужно ~100GB/s memory bandwidth.&lt;/p>
+&lt;p>NUMA siloing тоже их работа - привязка сетевых соединений к NUMA node, локальная аллокация памяти под файлы и crypto буферы. Intel Xeon поднялся с 105Gb/s до 191Gb/s.&lt;/p>
+&lt;p>Источник: &lt;a href="https://freebsdfoundation.org/end-user-stories/netflix-case-study/"target="_blank" rel="noopener">Netflix Case Study&lt;/a>&lt;/p>
+&lt;h2>Когда Linux лучше&lt;span class="hx:absolute hx:-mt-20" id="когда-linux-лучше">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-linux-%d0%bb%d1%83%d1%87%d1%88%d0%b5" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Bulk transfer больших объемов (Science DMZ сценарии). L3 forwarding на много CPU - Linux лучше параллелится. Hardware support шире.&lt;/p>
+&lt;p>io_uring в свежих ядрах может быть быстрее kqueue на некоторых паттернах - полностью асинхронный I/O.&lt;/p>
+&lt;h2>Когда FreeBSD лучше&lt;span class="hx:absolute hx:-mt-20" id="когда-freebsd-лучше">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-freebsd-%d0%bb%d1%83%d1%87%d1%88%d0%b5" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Стриминг статики с TLS. Web-серверы под высокой нагрузкой. Network appliances.&lt;/p>
+&lt;p>Используют Netflix, WhatsApp, Juniper.&lt;/p>
+&lt;p>Источник: &lt;a href="https://klarasystems.com/articles/freebsd-vs-linux-networking/"target="_blank" rel="noopener">Klara Systems&lt;/a>&lt;/p></description></item></channel></rss>

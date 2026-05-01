@@ -1,0 +1,218 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – IPv6</title><link>https://w.ranetkad.ru/networking/ipv6/</link><description>Recent content in IPv6 on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/networking/ipv6/index.xml" rel="self" type="application/rss+xml"/><item><title>Transition</title><link>https://w.ranetkad.ru/networking/ipv6/transition/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/ipv6/transition/</guid><description>
+&lt;h1>Transition&lt;/h1>&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>IPv6 и IPv4 несовместимы напрямую - нужны механизмы перехода. Два подхода:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>CGN-based&lt;/strong> - NAT централизованно (DS-Lite, NAT64). Центральный узел хранит состояние сессий.&lt;/li>
+&lt;li>&lt;strong>A+P-based&lt;/strong> - NAT на CPE (MAP-E, MAP-T). Центральный узел stateless, лучше масштабируется.&lt;/li>
+&lt;/ul>
+&lt;p>Любой механизм добавляет сложность. Предпочтителен native dual-stack или native IPv6.&lt;/p>
+&lt;h2>NAT64 / DNS64&lt;span class="hx:absolute hx:-mt-20" id="nat64--dns64">&lt;/span>
+&lt;a href="#nat64--dns64" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Позволяет IPv6-only клиентам обращаться к IPv4 серверам. RFC 6146 (NAT64), RFC 6147 (DNS64).&lt;/p>
+&lt;p>Компоненты:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>DNS64&lt;/strong> - синтезирует AAAA-записи из A-записей, добавляя NAT64-префикс&lt;/li>
+&lt;li>&lt;strong>NAT64&lt;/strong> - транслирует IPv6 &amp;lt;-&amp;gt; IPv4, хранит state&lt;/li>
+&lt;/ul>
+&lt;p>Префикс NAT64:&lt;/p>
+&lt;ul>
+&lt;li>Well-Known: &lt;code>64:ff9b::/96&lt;/code>&lt;/li>
+&lt;li>Network-Specific: любой /32, /40, /48, /56, /64, /96 провайдера&lt;/li>
+&lt;/ul>
+&lt;p>Процесс:&lt;/p>
+&lt;ol>
+&lt;li>Клиент запрашивает AAAA для example.com&lt;/li>
+&lt;li>DNS64 не находит AAAA, получает A: 93.184.216.34&lt;/li>
+&lt;li>DNS64 синтезирует: &lt;code>64:ff9b::5db8:d822&lt;/code> (5db8:d822 = 93.184.216.34 в hex)&lt;/li>
+&lt;li>Клиент шлет пакет на 64:ff9b::5db8:d822&lt;/li>
+&lt;li>NAT64 транслирует и форвардит на 93.184.216.34&lt;/li>
+&lt;/ol>
+&lt;p>Ограничения:&lt;/p>
+&lt;ul>
+&lt;li>Не работает с IPv4-литералами в приложениях (http://192.0.2.1)&lt;/li>
+&lt;li>Только исходящие соединения (IPv6 -&amp;gt; IPv4)&lt;/li>
+&lt;li>Не поддерживает протоколы с IP в payload (SIP, FTP active)&lt;/li>
+&lt;/ul>
+&lt;p>Применение: мобильные операторы (T-Mobile US, Telstra, Orange).&lt;/p>
+&lt;h2>464XLAT&lt;span class="hx:absolute hx:-mt-20" id="464xlat">&lt;/span>
+&lt;a href="#464xlat" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Решает проблему IPv4-литералов в приложениях. RFC 6877.&lt;/p>
+&lt;p>Компоненты:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>CLAT&lt;/strong> - на устройстве клиента, транслирует IPv4 -&amp;gt; IPv6&lt;/li>
+&lt;li>&lt;strong>PLAT&lt;/strong> - NAT64 провайдера&lt;/li>
+&lt;/ul>
+&lt;p>Процесс:&lt;/p>
+&lt;ol>
+&lt;li>Приложение использует IPv4-литерал (192.0.2.1)&lt;/li>
+&lt;li>CLAT перехватывает, транслирует в IPv6 с NAT64-префиксом&lt;/li>
+&lt;li>Пакет идет по IPv6-сети до PLAT&lt;/li>
+&lt;li>PLAT транслирует обратно в IPv4&lt;/li>
+&lt;/ol>
+&lt;p>Применение: Android с 4.3, iOS, Windows 10+.&lt;/p>
+&lt;h2>6to4&lt;span class="hx:absolute hx:-mt-20" id="6to4">&lt;/span>
+&lt;a href="#6to4" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;strong>Deprecated.&lt;/strong> RFC 3056 (2001), deprecated RFC 7526 (2015).&lt;/p>
+&lt;p>Идея: инкапсуляция IPv6 в IPv4 через anycast-релеи. Префикс 2002::/16, где следующие 32 бита - IPv4 адрес.&lt;/p>
+&lt;p>Проблемы:&lt;/p>
+&lt;ul>
+&lt;li>Асимметричная маршрутизация&lt;/li>
+&lt;li>Ненадежные публичные relay-роутеры&lt;/li>
+&lt;li>Не работает за NAT&lt;/li>
+&lt;li>Высокие задержки&lt;/li>
+&lt;/ul>
+&lt;p>Не использовать в новых развертываниях.&lt;/p>
+&lt;h2>6RD (IPv6 Rapid Deployment)&lt;span class="hx:absolute hx:-mt-20" id="6rd-ipv6-rapid-deployment">&lt;/span>
+&lt;a href="#6rd-ipv6-rapid-deployment" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Улучшенный 6to4 под контролем провайдера. RFC 5969 (2010).&lt;/p>
+&lt;p>Отличия от 6to4:&lt;/p>
+&lt;ul>
+&lt;li>Префикс провайдера вместо 2002::/16&lt;/li>
+&lt;li>Relay-роутеры (BR) в сети провайдера&lt;/li>
+&lt;li>Трафик симметричный и контролируемый&lt;/li>
+&lt;/ul>
+&lt;p>Компоненты:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>6RD CE&lt;/strong> - Customer Edge, инкапсулирует IPv6 в IPv4&lt;/li>
+&lt;li>&lt;strong>6RD BR&lt;/strong> - Border Relay, терминирует туннели&lt;/li>
+&lt;/ul>
+&lt;p>Процесс:&lt;/p>
+&lt;ol>
+&lt;li>CE получает 6RD-префикс и адрес BR через DHCP option 212&lt;/li>
+&lt;li>CE формирует /64 из 6RD-префикса + своего IPv4&lt;/li>
+&lt;li>CE инкапсулирует IPv6 в IPv4, шлет на BR&lt;/li>
+&lt;li>BR декапсулирует и маршрутизирует в IPv6-интернет&lt;/li>
+&lt;/ol>
+&lt;p>Применение: Free (Франция) развернул для миллионов клиентов за 5 недель.&lt;/p>
+&lt;h2>DS-Lite (Dual-Stack Lite)&lt;span class="hx:absolute hx:-mt-20" id="ds-lite-dual-stack-lite">&lt;/span>
+&lt;a href="#ds-lite-dual-stack-lite" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>IPv4 через IPv6-сеть провайдера. RFC 6333 (2011).&lt;/p>
+&lt;p>CPE не получает публичный IPv4. NAT выполняется централизованно.&lt;/p>
+&lt;p>Компоненты:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>B4&lt;/strong> - Basic Bridging BroadBand, на CPE. Инкапсулирует IPv4 в IPv6.&lt;/li>
+&lt;li>&lt;strong>AFTR&lt;/strong> - Address Family Transition Router. Терминирует туннель, выполняет CGNAT.&lt;/li>
+&lt;/ul>
+&lt;p>Адреса:&lt;/p>
+&lt;ul>
+&lt;li>AFTR: 192.0.0.1 (well-known)&lt;/li>
+&lt;li>B4: из 192.0.0.0/29&lt;/li>
+&lt;/ul>
+&lt;p>Процесс:&lt;/p>
+&lt;ol>
+&lt;li>B4 получает адрес AFTR через DHCPv6 option 64&lt;/li>
+&lt;li>Хост в LAN получает приватный IPv4 (RFC1918)&lt;/li>
+&lt;li>B4 инкапсулирует IPv4 в IPv6, шлет на AFTR&lt;/li>
+&lt;li>AFTR декапсулирует, выполняет NAT44, маршрутизирует в IPv4&lt;/li>
+&lt;/ol>
+&lt;p>NAT на CPE не нужен - B4 передает пакеты без трансляции.&lt;/p>
+&lt;p>Особенности:&lt;/p>
+&lt;ul>
+&lt;li>Централизованное состояние NAT на AFTR&lt;/li>
+&lt;li>AFTR - точка отказа и узкое место&lt;/li>
+&lt;li>ALG для проблемных протоколов на AFTR&lt;/li>
+&lt;/ul>
+&lt;h2>MAP-E&lt;span class="hx:absolute hx:-mt-20" id="map-e">&lt;/span>
+&lt;a href="#map-e" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Mapping of Address and Port with Encapsulation. RFC 7597 (2015).&lt;/p>
+&lt;p>NAT на CPE, центральный узел stateless.&lt;/p>
+&lt;p>Компоненты:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>MAP CE&lt;/strong> - выполняет NAPT44 + инкапсуляцию IPv4 в IPv6&lt;/li>
+&lt;li>&lt;strong>MAP BR&lt;/strong> - Border Relay, декапсулирует, без NAT-состояния&lt;/li>
+&lt;/ul>
+&lt;p>Принцип:&lt;/p>
+&lt;ul>
+&lt;li>CE получает часть портов публичного IPv4 (port set)&lt;/li>
+&lt;li>Mapping rules определяют соответствие IPv4+port &amp;lt;-&amp;gt; IPv6&lt;/li>
+&lt;/ul>
+&lt;p>Процесс:&lt;/p>
+&lt;ol>
+&lt;li>CE получает MAP rules через DHCPv6&lt;/li>
+&lt;li>CE выполняет NAT44 с выделенным IPv4 и port set&lt;/li>
+&lt;li>CE инкапсулирует в IPv6, шлет на BR&lt;/li>
+&lt;li>BR декапсулирует, форвардит по IPv4 без NAT&lt;/li>
+&lt;/ol>
+&lt;p>Оверхед: 40 байт на пакет (IPv6 заголовок). MTU нужно учитывать.&lt;/p>
+&lt;h2>MAP-T&lt;span class="hx:absolute hx:-mt-20" id="map-t">&lt;/span>
+&lt;a href="#map-t" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Mapping of Address and Port using Translation. RFC 7599 (2015).&lt;/p>
+&lt;p>Как MAP-E, но трансляция вместо инкапсуляции.&lt;/p>
+&lt;p>Отличия от MAP-E:&lt;/p>
+&lt;ul>
+&lt;li>CE: NAT44 + NAT46 (stateless)&lt;/li>
+&lt;li>BR: NAT64 (stateless)&lt;/li>
+&lt;li>Нет оверхеда инкапсуляции&lt;/li>
+&lt;li>IPv4 destination кодируется в IPv6 destination&lt;/li>
+&lt;/ul>
+&lt;p>Применение: когда оверхед MAP-E критичен или нужна классификация по IPv6-заголовкам.&lt;/p>
+&lt;h2>Туннелирование routing protocols&lt;span class="hx:absolute hx:-mt-20" id="туннелирование-routing-protocols">&lt;/span>
+&lt;a href="#%d1%82%d1%83%d0%bd%d0%bd%d0%b5%d0%bb%d0%b8%d1%80%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-routing-protocols" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>IPv6 routing protocols (OSPFv3, BGP, RIPng) можно запустить через IPv4 backbone используя туннели.&lt;/p>
+&lt;p>Типы туннелей:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Manual IPv6-in-IPv4&lt;/strong> (RFC 4213) - protocol 41&lt;/li>
+&lt;li>&lt;strong>GRE&lt;/strong> - более универсальный, поддерживает multicast&lt;/li>
+&lt;/ul>
+&lt;p>GRE предпочтителен для IGP (OSPFv3, EIGRP) - поддерживает multicast для обмена hello/LSA.&lt;/p>
+&lt;p>Настройка:&lt;/p>
+&lt;ol>
+&lt;li>Tunnel source/destination - IPv4 адреса&lt;/li>
+&lt;li>Tunnel mode: ipv6ip или gre ip&lt;/li>
+&lt;li>На tunnel interface назначается IPv6 (достаточно &lt;code>ipv6 enable&lt;/code> для link-local)&lt;/li>
+&lt;li>Включается routing protocol на tunnel interface&lt;/li>
+&lt;/ol>
+&lt;p>Особенности:&lt;/p>
+&lt;ul>
+&lt;li>OSPFv3 использует link-local как next-hop&lt;/li>
+&lt;li>Можно комбинировать с IPSec для шифрования&lt;/li>
+&lt;li>MTU учитывать: GRE добавляет 24+ байт оверхеда&lt;/li>
+&lt;/ul>
+&lt;h2>Сравнение&lt;span class="hx:absolute hx:-mt-20" id="сравнение">&lt;/span>
+&lt;a href="#%d1%81%d1%80%d0%b0%d0%b2%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Механизм&lt;/th>
+&lt;th>NAT на&lt;/th>
+&lt;th>State на&lt;/th>
+&lt;th>Оверхед&lt;/th>
+&lt;th>Статус&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>NAT64&lt;/td>
+&lt;td>NAT64&lt;/td>
+&lt;td>NAT64&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>Активно используется&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>6to4&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>20B&lt;/td>
+&lt;td>Deprecated&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>6RD&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>20B&lt;/td>
+&lt;td>Используется&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DS-Lite&lt;/td>
+&lt;td>AFTR&lt;/td>
+&lt;td>AFTR&lt;/td>
+&lt;td>40B&lt;/td>
+&lt;td>Используется&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>MAP-E&lt;/td>
+&lt;td>CE&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>40B&lt;/td>
+&lt;td>Используется&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>MAP-T&lt;/td>
+&lt;td>CE&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>Используется&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item></channel></rss>
