@@ -3,8 +3,6 @@ title: "IPVS"
 weight: 6
 ---
 
-# IPVS
-
 ## Коротко
 
 IP Virtual Server - балансировщик нагрузки L4 в ядре Linux. Часть проекта LVS (Linux Virtual Server).

@@ -2,8 +2,6 @@
 title: "SRv6"
 ---
 
-# SRv6
-
 ## Коротко
 
 SRv6 - реализация Segment Routing на IPv6. SID - это 128-битный IPv6 адрес, который одновременно и адрес узла, и инструкция. Underlay - чистый IPv6 с IGP (IS-IS). Overlay - VPN сервисы через BGP.

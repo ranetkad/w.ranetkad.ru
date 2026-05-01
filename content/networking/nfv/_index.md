@@ -3,8 +3,6 @@ title: "NFV"
 weight: 6
 ---
 
-# NFV (Network Function Virtualization)
-
 ## Коротко
 
 NFV - перенос сетевых функций (firewall, load balancer, router, NAT, VPN) с железных appliances на виртуальные машины или контейнеры поверх стандартных x86 серверов.

@@ -2,8 +2,6 @@
 title: "Анонсирование"
 ---
 
-# Анонсирование
-
 ## Коротко
 
 NLRI (Network Layer Reachability Information) - префиксы, которые BGP анонсирует соседям.

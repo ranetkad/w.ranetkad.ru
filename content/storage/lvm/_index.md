@@ -3,8 +3,6 @@ title: "LVM"
 weight: 2
 ---
 
-# LVM
-
 ## TL;DR
 
 - PV (Physical Volume) — физический диск/раздел

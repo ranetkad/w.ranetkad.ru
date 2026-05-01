@@ -3,8 +3,6 @@ title: "IPv6"
 weight: 5
 ---
 
-# IPv6
-
 ## Коротко
 
 128-битные адреса (2^128). Заголовок упрощен: 8 полей вместо 13 в IPv4, фиксированный размер 40 байт. Нет broadcast - вместо него multicast. Нет ARP - вместо него NDP (Neighbor Discovery Protocol) на базе ICMPv6.

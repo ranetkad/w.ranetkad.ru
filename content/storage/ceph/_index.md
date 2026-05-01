@@ -3,8 +3,6 @@ title: "Ceph"
 weight: 1
 ---
 
-# Ceph
-
 ## TL;DR
 
 Программно-определяемое распределённое хранилище. Даёт block (RBD), object (S3/Swift) и file (CephFS) storage из одного кластера.

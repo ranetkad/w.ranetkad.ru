@@ -3,8 +3,6 @@ title: "TLS"
 weight: 8
 ---
 
-# TLS
-
 ## Коротко
 
 Transport Layer Security - шифрование соединения между клиентом и сервером.

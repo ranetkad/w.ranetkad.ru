@@ -2,8 +2,6 @@
 title: "Дополнительно"
 ---
 
-# Дополнительно
-
 ## Коротко
 
 Multipath, communities, add-path, BFD, route refresh и другие фичи для production.

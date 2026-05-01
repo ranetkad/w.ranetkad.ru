@@ -3,8 +3,6 @@ title: "Keepalived"
 weight: 5
 ---
 
-# Keepalived
-
 ## Коротко
 
 Демон для отказоустойчивости на Linux. Реализует VRRP (Virtual Router Redundancy Protocol) - автоматический failover виртуального IP между серверами. Также может выполнять балансировку нагрузки через IPVS (LVS).

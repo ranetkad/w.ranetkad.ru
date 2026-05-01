@@ -2,8 +2,6 @@
 title: "CLI"
 ---
 
-# CLI
-
 ## Коротко
 
 Unified CLI для OpenStack. Перед использованием нужно source keystonerc файла проекта.

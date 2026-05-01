@@ -3,8 +3,6 @@ title: "OVS"
 weight: 3
 ---
 
-# Open vSwitch
-
 ## Коротко
 
 Программный коммутатор уровня L2-L4. Поддерживает OpenFlow, VLAN, bonding, QoS.

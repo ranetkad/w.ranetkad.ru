@@ -3,8 +3,6 @@ title: "DPDK"
 weight: 3
 ---
 
-# DPDK
-
 ## Коротко
 
 Data Plane Development Kit - набор библиотек для высокопроизводительной обработки пакетов в userspace. Разработан Intel, сейчас под Linux Foundation.

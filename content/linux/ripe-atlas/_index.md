@@ -3,8 +3,6 @@ title: "RIPE Atlas"
 weight: 7
 ---
 
-# RIPE Atlas Software Probe
-
 ## Коротко
 
 Программная probe для сети измерений RIPE NCC. Выполняет ping, traceroute, DNS, SSL/TLS, NTP, HTTP измерения по заданиям из облака.

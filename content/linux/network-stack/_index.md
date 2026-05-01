@@ -3,8 +3,6 @@ title: "Network stack"
 weight: 1
 ---
 
-# Путь пакета в Linux
-
 ## Коротко
 
 Пакет проходит: Провод -> NIC -> DMA -> Ring Buffer -> Hard IRQ -> Soft IRQ (NAPI) -> Сетевой стек ядра -> Socket Buffer -> Userspace.

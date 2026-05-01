@@ -3,8 +3,6 @@ title: "TCP"
 weight: 7
 ---
 
-# TCP
-
 ## Коротко
 
 Transmission Control Protocol - надежный транспортный протокол с гарантией доставки и порядка.

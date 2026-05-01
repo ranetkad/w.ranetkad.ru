@@ -74,7 +74,8 @@ hasCJKLanguage = false
       tokenize = "forward"
 
   [params.editURL]
-    enable = false
+    enable = true
+    base = "https://github.com/ranetkad/w.ranetkad.ru/edit/main/content"
 
   [params.toc]
     displayTags = false

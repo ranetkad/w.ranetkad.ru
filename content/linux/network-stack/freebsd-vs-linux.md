@@ -2,8 +2,6 @@
 title: "FreeBSD vs Linux"
 ---
 
-# FreeBSD vs Linux
-
 ## Коротко
 
 Netflix гонит 400Gb/s с одного сервера на FreeBSD. Почему не Linux? sendfile + KTLS в ядре дают zero-copy до самого NIC. В Linux данные копируются для TLS шифрования в nginx.
