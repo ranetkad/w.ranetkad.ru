@@ -59,8 +59,14 @@ hasCJKLanguage = false
     [menu.main.params]
       type = "search"
   [[menu.main]]
-    name = "GitHub"
+    name = "Telegram"
     weight = 6
+    url = "https://t.me/ranetkad"
+    [menu.main.params]
+      icon = "telegram"
+  [[menu.main]]
+    name = "GitHub"
+    weight = 7
     url = "https://github.com/ranetkad/wiki.ranetkad.ru"
     [menu.main.params]
       icon = "github"
