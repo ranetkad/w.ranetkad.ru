@@ -1,0 +1,61 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Ovn</title><link>https://w.ranetkad.ru/tags/ovn/</link><description>Recent content in Ovn on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/ovn/index.xml" rel="self" type="application/rss+xml"/><item><title>OVN</title><link>https://w.ranetkad.ru/networking/ovn/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/ovn/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Control plane поверх OVS. OVS остается dataplane, OVN добавляет logical switch, logical router и distributed flows.&lt;/p>
+&lt;h2>Архитектура&lt;span class="hx:absolute hx:-mt-20" id="архитектура">&lt;/span>
+&lt;a href="#%d0%b0%d1%80%d1%85%d0%b8%d1%82%d0%b5%d0%ba%d1%82%d1%83%d1%80%d0%b0" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>ovn-nbctl -&amp;gt; OVN Northbound DB (logical: switches, routers, ACLs)
+|
+ovn-northd (compiles to logical flows)
+|
+OVN Southbound DB (chassis, port-bindings, logical flows)
+|
+ovs-vsctl -&amp;gt; ovn-controller (на каждом hypervisor) -&amp;gt; OVS flows&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
+&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Термин | Что |
+| Logical Switch | виртуальный L2 segment, multi-host |
+| Logical Router | distributed router, logical |
+| Chassis | hypervisor с ovn-controller |
+| Port Binding | привязка logical port к chassis |
+| Localnet | L2 attachment к физической сети через bridge mapping |
+| Geneve | default tunnel encapsulation между chassis |&lt;/p>
+&lt;h2>Команды&lt;span class="hx:absolute hx:-mt-20" id="команды">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>ovn-nbctl ls-list / ls-add / ls-del
+ovn-nbctl lr-list / lr-add / lr-del
+ovn-nbctl lsp-add / lsp-set-addresses
+ovn-sbctl show
+ovn-sbctl chassis-list
+ovn-trace --detailed &amp;lt;ls&amp;gt; &amp;lt;flow&amp;gt;&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Применения&lt;span class="hx:absolute hx:-mt-20" id="применения">&lt;/span>
+&lt;a href="#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>OpenStack Neutron (ML2/OVN driver, заменил ML2/OVS с Yoga)&lt;/li>
+&lt;li>Kubernetes CNI (ovn-kubernetes)&lt;/li>
+&lt;li>Standalone SDN&lt;/li>
+&lt;/ul>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/ovs/">OVS&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/evpn/">EVPN&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

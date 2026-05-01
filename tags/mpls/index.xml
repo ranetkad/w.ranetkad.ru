@@ -1,0 +1,534 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Mpls</title><link>https://w.ranetkad.ru/tags/mpls/</link><description>Recent content in Mpls on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/mpls/index.xml" rel="self" type="application/rss+xml"/><item><title>MPLS</title><link>https://w.ranetkad.ru/networking/mpls/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/mpls/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>RFC 3031. Label stack между L2 и L3. Forwarding по LFIB, а не по IP.&lt;/p>
+&lt;p>Label 20 бит, EXP 3 бит (QoS), S 1 бит (bottom-of-stack), TTL 8 бит.&lt;/p>
+&lt;h2>Сигналинг меток&lt;span class="hx:absolute hx:-mt-20" id="сигналинг-меток">&lt;/span>
+&lt;a href="#%d1%81%d0%b8%d0%b3%d0%bd%d0%b0%d0%bb%d0%b8%d0%bd%d0%b3-%d0%bc%d0%b5%d1%82%d0%be%d0%ba" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Протокол | Что делает |
+| LDP | hop-by-hop signaling, простой, RFC 5036 |
+| RSVP-TE | TE-туннели с резервированием, RFC 3209 |
+| BGP-LU | labeled unicast, RFC 8277, для inter-AS L3VPN и SR-MPLS |
+| Segment Routing | source routing через стек меток (SR-MPLS, RFC 8660) |&lt;/p>
+&lt;h2>Reserved labels&lt;span class="hx:absolute hx:-mt-20" id="reserved-labels">&lt;/span>
+&lt;a href="#reserved-labels" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Label | Имя | Смысл |
+| 0 | Explicit NULL IPv4 | PHP off, get IPv4 |
+| 1 | Router Alert | |
+| 2 | Explicit NULL IPv6 | |
+| 3 | Implicit NULL | PHP, label pop на penultimate hop |&lt;/p>
+&lt;h2>Применения&lt;span class="hx:absolute hx:-mt-20" id="применения">&lt;/span>
+&lt;a href="#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Применение | Что |
+| L3VPN | VPNv4/VPNv6 с PE-CE, RFC 4364 |
+| L2VPN | VPLS и EVPN over MPLS |
+| TE | explicit paths, FRR |
+| SR-MPLS | segment routing на стеке меток |&lt;/p>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/bgp/">BGP&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/segment-routing/">Segment Routing&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/evpn/">EVPN&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Segment Routing</title><link>https://w.ranetkad.ru/networking/segment-routing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/segment-routing/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Segment Routing (SR) - архитектура маршрутизации от источника. Головной узел выбирает путь и кодирует его как упорядоченный список сегментов (SID). Каждый транзитный узел выполняет инструкцию из верхнего сегмента и удаляет его.&lt;/p>
+&lt;p>Два data plane:&lt;/p>
+&lt;ul>
+&lt;li>SR-MPLS - использует MPLS метки (20 бит), совместим с существующим оборудованием&lt;/li>
+&lt;li>SRv6 - использует IPv6 заголовки (128 бит SID)&lt;/li>
+&lt;/ul>
+&lt;p>Зачем:&lt;/p>
+&lt;ul>
+&lt;li>Убирает LDP и RSVP-TE из control plane&lt;/li>
+&lt;li>IGP (OSPF/IS-IS) сам распространяет SID&lt;/li>
+&lt;li>Нет per-flow состояния на транзитных узлах&lt;/li>
+&lt;li>Fast reroute &amp;lt; 50ms&lt;/li>
+&lt;/ul>
+&lt;h2>Типы сегментов&lt;span class="hx:absolute hx:-mt-20" id="типы-сегментов">&lt;/span>
+&lt;a href="#%d1%82%d0%b8%d0%bf%d1%8b-%d1%81%d0%b5%d0%b3%d0%bc%d0%b5%d0%bd%d1%82%d0%be%d0%b2" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;strong>Prefix SID&lt;/strong> (глобальный):&lt;/p>
+&lt;ul>
+&lt;li>Привязан к IP-префиксу&lt;/li>
+&lt;li>Кодируется как индекс (смещение от SRGB)&lt;/li>
+&lt;li>IGP строит кратчайший путь до префикса&lt;/li>
+&lt;li>Поддерживает ECMP&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Node SID&lt;/strong> (частный случай Prefix SID):&lt;/p>
+&lt;ul>
+&lt;li>Привязан к loopback-адресу узла&lt;/li>
+&lt;li>Флаг N-Flag = 1&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Adjacency SID&lt;/strong> (локальный):&lt;/p>
+&lt;ul>
+&lt;li>Привязан к конкретному линку&lt;/li>
+&lt;li>Абсолютное значение метки (не индекс)&lt;/li>
+&lt;li>Выделяется динамически из SRLB&lt;/li>
+&lt;li>Нет ECMP - форсирует трафик через конкретный интерфейс&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Anycast SID&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Один и тот же SID анонсируется несколькими узлами&lt;/li>
+&lt;li>Трафик идет к ближайшему узлу по IGP&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Binding SID&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Локальный сегмент, представляет SR-TE policy&lt;/li>
+&lt;li>Абстрагирует список сегментов за одной меткой&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>BGP Prefix SID&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Глобальный сегмент для BGP-префикса&lt;/li>
+&lt;li>Используется в inter-domain сценариях (Unified MPLS)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>BGP Peering SID&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Локальный сегмент для BGP-соседа&lt;/li>
+&lt;li>Форсирует трафик через конкретного BGP peer&lt;/li>
+&lt;/ul>
+&lt;h2>Label Blocks&lt;span class="hx:absolute hx:-mt-20" id="label-blocks">&lt;/span>
+&lt;a href="#label-blocks" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;strong>SRGB&lt;/strong> (Segment Routing Global Block):&lt;/p>
+&lt;ul>
+&lt;li>Диапазон меток для глобальных сегментов (Prefix/Node SID)&lt;/li>
+&lt;li>По умолчанию: 16000-23999&lt;/li>
+&lt;li>Prefix SID = SRGB base + index&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>SRLB&lt;/strong> (Segment Routing Local Block):&lt;/p>
+&lt;ul>
+&lt;li>Диапазон меток для локальных сегментов (Adjacency SID)&lt;/li>
+&lt;li>Выделяется отдельно от SRGB&lt;/li>
+&lt;/ul>
+&lt;h2>SR-TE (Traffic Engineering)&lt;span class="hx:absolute hx:-mt-20" id="sr-te-traffic-engineering">&lt;/span>
+&lt;a href="#sr-te-traffic-engineering" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Segment Routing Traffic Engineering - управление путем через сеть.&lt;/p>
+&lt;p>SR-TE Policy идентифицируется тройкой: (head-end, color, end-point).&lt;/p>
+&lt;ul>
+&lt;li>head-end: узел, где создается policy&lt;/li>
+&lt;li>color: числовой идентификатор (1-4294967295)&lt;/li>
+&lt;li>end-point: конечная точка&lt;/li>
+&lt;/ul>
+&lt;p>SID-list вставляется в пакет на head-end. Транзитные узлы выполняют инструкции.&lt;/p>
+&lt;p>&lt;strong>Prefix SID в TE&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>ECMP, устойчивость к изменениям топологии&lt;/li>
+&lt;li>Может удлинить путь&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Adjacency SID в TE&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Детерминированный путь&lt;/li>
+&lt;li>Нет ECMP, уязвим к отказам&lt;/li>
+&lt;/ul>
+&lt;h2>On-Demand Next Hop (ODN)&lt;span class="hx:absolute hx:-mt-20" id="on-demand-next-hop-odn">&lt;/span>
+&lt;a href="#on-demand-next-hop-odn" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Автоматическое создание SR-TE policy при появлении BGP-маршрута с color extended community. Head-end применяет шаблон для соответствующего color.&lt;/p>
+&lt;p>Варианты вычисления пути:&lt;/p>
+&lt;ul>
+&lt;li>Локально (head-end использует свою TE topology database)&lt;/li>
+&lt;li>Централизованно (SR-PCE)&lt;/li>
+&lt;/ul>
+&lt;h2>Flexible Algorithm (Flex-Algo)&lt;span class="hx:absolute hx:-mt-20" id="flexible-algorithm-flex-algo">&lt;/span>
+&lt;a href="#flexible-algorithm-flex-algo" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>IGP вычисляет дополнительные пути на основе ограничений. Простой TE без контроллера.&lt;/p>
+&lt;p>Flex-Algo ID: 128-255 (до 128 алгоритмов).&lt;/p>
+&lt;p>Параметры:&lt;/p>
+&lt;ul>
+&lt;li>Calculation type: SPF или Strict SPF&lt;/li>
+&lt;li>Metric type: IGP / delay / TE metric&lt;/li>
+&lt;li>Constraints: affinity (include/exclude links), min bandwidth, max delay&lt;/li>
+&lt;/ul>
+&lt;p>Все узлы должны согласовать определение Flex-Algo (FAD). Один узел анонсирует FAD с приоритетом.&lt;/p>
+&lt;p>Prefix SID для Flex-Algo отличается от обычного - трафик идет по пути, вычисленному с ограничениями.&lt;/p>
+&lt;p>Применение:&lt;/p>
+&lt;ul>
+&lt;li>Low-latency routing (metric type = delay)&lt;/li>
+&lt;li>Исключение определенных линков (affinity)&lt;/li>
+&lt;li>Разделение трафика по типам сервисов&lt;/li>
+&lt;/ul>
+&lt;h2>TI-LFA (Fast Reroute)&lt;span class="hx:absolute hx:-mt-20" id="ti-lfa-fast-reroute">&lt;/span>
+&lt;a href="#ti-lfa-fast-reroute" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Topology Independent Loop-Free Alternate - защита от отказов &amp;lt; 50ms.&lt;/p>
+&lt;p>Преимущества над классическим LFA/RLFA:&lt;/p>
+&lt;ul>
+&lt;li>100% покрытие в любой топологии (не зависит от геометрии сети)&lt;/li>
+&lt;li>Не требует LDP для RLFA туннелей&lt;/li>
+&lt;li>Все SID уже в LSDB от IGP&lt;/li>
+&lt;/ul>
+&lt;p>Как работает:&lt;/p>
+&lt;ul>
+&lt;li>PLR (Point of Local Repair) заранее вычисляет backup path&lt;/li>
+&lt;li>При отказе линка/узла - мгновенное переключение на backup&lt;/li>
+&lt;li>Backup path использует SID-list для обхода отказавшего элемента&lt;/li>
+&lt;/ul>
+&lt;p>Защита:&lt;/p>
+&lt;ul>
+&lt;li>Link protection&lt;/li>
+&lt;li>Node protection&lt;/li>
+&lt;li>SRLG protection (Shared Risk Link Group)&lt;/li>
+&lt;/ul>
+&lt;h2>Microloop Avoidance&lt;span class="hx:absolute hx:-mt-20" id="microloop-avoidance">&lt;/span>
+&lt;a href="#microloop-avoidance" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Предотвращение кратковременных петель при конвергенции сети.&lt;/p>
+&lt;p>Microloop возникает из-за неодновременной конвергенции разных узлов после изменения топологии.&lt;/p>
+&lt;p>Как работает:&lt;/p>
+&lt;ul>
+&lt;li>После события (link down/up, metric change) узел вычисляет post-convergence path&lt;/li>
+&lt;li>Если возможен microloop - устанавливает SID-list для обхода&lt;/li>
+&lt;li>После таймера (когда все узлы сконвергировались) - переключается на обычный путь&lt;/li>
+&lt;/ul>
+&lt;p>Работает локально - не требует поддержки на всех узлах.&lt;/p>
+&lt;h2>Path Computation Element (PCE)&lt;span class="hx:absolute hx:-mt-20" id="path-computation-element-pce">&lt;/span>
+&lt;a href="#path-computation-element-pce" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Централизованный контроллер для вычисления путей. Узнает топологию через IGP или BGP-LS.&lt;/p>
+&lt;p>&lt;strong>PCEP&lt;/strong> (Path Computation Element Protocol):&lt;/p>
+&lt;ul>
+&lt;li>TCP-based протокол между PCC и PCE&lt;/li>
+&lt;li>PCC (Path Computation Client) - маршрутизатор, запрашивающий путь&lt;/li>
+&lt;li>PCE вычисляет и инициирует SR-TE policy&lt;/li>
+&lt;/ul>
+&lt;p>Сообщения PCEP:&lt;/p>
+&lt;ul>
+&lt;li>PCInitiate - PCE инициирует policy на PCC&lt;/li>
+&lt;li>PCRpt - PCC отчитывается о состоянии&lt;/li>
+&lt;li>PCUpd - PCE обновляет policy&lt;/li>
+&lt;li>PCErr - ошибка&lt;/li>
+&lt;/ul>
+&lt;p>SR-PCE поддерживает stateful режим: PCE хранит состояние всех LSP и может их модифицировать.&lt;/p>
+&lt;h2>Performance Measurement (PM)&lt;span class="hx:absolute hx:-mt-20" id="performance-measurement-pm">&lt;/span>
+&lt;a href="#performance-measurement-pm" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Измерение характеристик сети: delay, packet loss, jitter.&lt;/p>
+&lt;p>Протоколы:&lt;/p>
+&lt;ul>
+&lt;li>TWAMP-Light (RFC 5357) - IP/UDP encap, по умолчанию&lt;/li>
+&lt;li>PM-MPLS (RFC 6374) - MPLS encap&lt;/li>
+&lt;/ul>
+&lt;p>Режимы:&lt;/p>
+&lt;ul>
+&lt;li>Two-way delay (по умолчанию)&lt;/li>
+&lt;li>One-way delay (требует синхронизации PTP)&lt;/li>
+&lt;/ul>
+&lt;p>Применение:&lt;/p>
+&lt;ul>
+&lt;li>Мониторинг SLA&lt;/li>
+&lt;li>Вход для Flex-Algo (metric type = delay)&lt;/li>
+&lt;li>Troubleshooting сети&lt;/li>
+&lt;/ul>
+&lt;p>Заменяет отдельные протоколы мониторинга (BFD для liveness + отдельный PM).&lt;/p>
+&lt;h2>SRv6&lt;span class="hx:absolute hx:-mt-20" id="srv6">&lt;/span>
+&lt;a href="#srv6" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Segment Routing поверх IPv6 data plane. SID = 128 бит (IPv6 адрес).&lt;/p>
+&lt;p>Структура SID:&lt;/p>
+&lt;ul>
+&lt;li>Locator (префикс, маршрутизируемый по IGP)&lt;/li>
+&lt;li>Function (инструкция: End, End.X, End.DT4, и т.д.)&lt;/li>
+&lt;li>Arguments (опционально)&lt;/li>
+&lt;/ul>
+&lt;p>Преимущества:&lt;/p>
+&lt;ul>
+&lt;li>Нативная поддержка в IPv6 сетях&lt;/li>
+&lt;li>Network Programming - богатый набор инструкций&lt;/li>
+&lt;li>Не требует MPLS&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Micro-SID (uSID)&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Компактное кодирование: до 6 uSID в одном 128-бит carrier&lt;/li>
+&lt;li>uSID = 16 бит (вместо 128)&lt;/li>
+&lt;li>Путь из 5 хопов: 16 байт вместо 80 байт&lt;/li>
+&lt;li>Если &amp;gt; 6 uSID - используется SRH (Segment Routing Header)&lt;/li>
+&lt;/ul>
+&lt;p>uSID Block - IPv6 префикс для блока micro-SID.
+uN - базовая micro-инструкция: shortest path + активация следующего uSID.&lt;/p>
+&lt;h2>VPN Services поверх SR&lt;span class="hx:absolute hx:-mt-20" id="vpn-services-поверх-sr">&lt;/span>
+&lt;a href="#vpn-services-%d0%bf%d0%be%d0%b2%d0%b5%d1%80%d1%85-sr" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;strong>L3VPN (VPNv4/VPNv6)&lt;/strong>:&lt;/p>
+&lt;p>Конфигурация не отличается от классического MPLS:&lt;/p>
+&lt;ul>
+&lt;li>VRF на PE&lt;/li>
+&lt;li>MP-BGP для VPNv4 между PE (напрямую или через RR)&lt;/li>
+&lt;li>Транспортные метки - SR вместо LDP&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>L2VPN&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>VPWS (point-to-point pseudowire)&lt;/li>
+&lt;li>VPLS (multipoint, flooding/learning)&lt;/li>
+&lt;li>EVPN (control plane learning через BGP)&lt;/li>
+&lt;/ul>
+&lt;p>L2VPN сервисы используют SR-TE policy через preferred-path.&lt;/p>
+&lt;p>EVPN над SR-MPLS/SRv6 - современный подход для DC и SP сетей.&lt;/p>
+&lt;h2>Inter-Domain SR&lt;span class="hx:absolute hx:-mt-20" id="inter-domain-sr">&lt;/span>
+&lt;a href="#inter-domain-sr" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Сценарии для multi-area/multi-AS:&lt;/p>
+&lt;p>&lt;strong>Option A&lt;/strong> - back-to-back VRF на ASBR&lt;/p>
+&lt;p>&lt;strong>Option B&lt;/strong> - обмен labeled VPN routes между ASBR&lt;/p>
+&lt;p>&lt;strong>Option C&lt;/strong> - обмен loopback через BGP-LU + VPNv4 через RR&lt;/p>
+&lt;ul>
+&lt;li>BGP Prefix SID обеспечивает сквозной LSP&lt;/li>
+&lt;li>Каждый домен имеет свой SRGB&lt;/li>
+&lt;/ul>
+&lt;p>Unified MPLS / Seamless MPLS - end-to-end SR через несколько IGP доменов.&lt;/p>
+&lt;h2>Миграция с LDP&lt;span class="hx:absolute hx:-mt-20" id="миграция-с-ldp">&lt;/span>
+&lt;a href="#%d0%bc%d0%b8%d0%b3%d1%80%d0%b0%d1%86%d0%b8%d1%8f-%d1%81-ldp" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>SR совместим с LDP. Варианты миграции:&lt;/p>
+&lt;p>&lt;strong>SR Prefer&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Если есть и SR label и LDP label для префикса - используется SR&lt;/li>
+&lt;li>Позволяет постепенную миграцию&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Mapping Server&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Анонсирует SID для префиксов от LDP-only узлов&lt;/li>
+&lt;li>Позволяет SR узлам достигать LDP узлов&lt;/li>
+&lt;/ul>
+&lt;h2>Стандарты&lt;span class="hx:absolute hx:-mt-20" id="стандарты">&lt;/span>
+&lt;a href="#%d1%81%d1%82%d0%b0%d0%bd%d0%b4%d0%b0%d1%80%d1%82%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>RFC 8402 - Segment Routing Architecture&lt;/li>
+&lt;li>RFC 8660 - Segment Routing with MPLS Data Plane&lt;/li>
+&lt;li>RFC 8667 - IS-IS Extensions for Segment Routing&lt;/li>
+&lt;li>RFC 8665 - OSPF Extensions for Segment Routing&lt;/li>
+&lt;li>RFC 8664 - PCEP Extensions for Segment Routing&lt;/li>
+&lt;li>RFC 9256 - Segment Routing Policy Architecture&lt;/li>
+&lt;li>RFC 9862 - PCEP Extensions for SR Policy Candidate Paths&lt;/li>
+&lt;li>RFC 9855 - TI-LFA using Segment Routing&lt;/li>
+&lt;li>RFC 8986 - SRv6 Network Programming&lt;/li>
+&lt;/ul>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/bgp/">BGP&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/mpls/">MPLS&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/evpn/">EVPN&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>SRv6</title><link>https://w.ranetkad.ru/networking/segment-routing/srv6/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/segment-routing/srv6/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>SRv6 - реализация Segment Routing на IPv6. SID - это 128-битный IPv6 адрес, который одновременно и адрес узла, и инструкция. Underlay - чистый IPv6 с IGP (IS-IS). Overlay - VPN сервисы через BGP.&lt;/p>
+&lt;p>Нет MPLS. Нет LDP. Один протокол для transport и services.&lt;/p>
+&lt;h2>Структура SID&lt;span class="hx:absolute hx:-mt-20" id="структура-sid">&lt;/span>
+&lt;a href="#%d1%81%d1%82%d1%80%d1%83%d0%ba%d1%82%d1%83%d1%80%d0%b0-sid" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>|&amp;lt;-- Locator (L) --&amp;gt;|&amp;lt;-- Function (F) --&amp;gt;|&amp;lt;-- Args (A) --&amp;gt;|&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Locator - маршрутизируемый IPv6 префикс (/48 или /64). IGP знает как дойти до locator.&lt;/p>
+&lt;p>Function - что делать когда дошли. 16-32 бита. End.DT4, End.DX2 и т.д.&lt;/p>
+&lt;p>Args - дополнительные параметры. Обычно не используется.&lt;/p>
+&lt;p>Locator состоит из Block (адресное пространство домена) и Node ID.&lt;/p>
+&lt;h2>Адресный план&lt;span class="hx:absolute hx:-mt-20" id="адресный-план">&lt;/span>
+&lt;a href="#%d0%b0%d0%b4%d1%80%d0%b5%d1%81%d0%bd%d1%8b%d0%b9-%d0%bf%d0%bb%d0%b0%d0%bd" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Типичный формат (F3216):&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>BBBB:BBBF:SSNN::/48
+B - block организации (28 бит)
+F - Flex-Algo (4 бита, если нужен)
+S - Set/POD (8 бит)
+N - Node (8 бит)&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Главное - планировать суммаризацию. На границе POD анонсируется один /48 вместо сотен /64 от каждого узла.&lt;/p>
+&lt;h2>SRH&lt;span class="hx:absolute hx:-mt-20" id="srh">&lt;/span>
+&lt;a href="#srh" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Segment Routing Header - extension header для списка сегментов.&lt;/p>
+&lt;p>Segments Left (SL) - сколько сегментов осталось. Segment List - массив SID.&lt;/p>
+&lt;p>Активный сегмент лежит в DA пакета. Узел обрабатывает, уменьшает SL, копирует следующий SID в DA.&lt;/p>
+&lt;p>Если путь из одного сегмента - SRH вообще не нужен, хватает DA.&lt;/p>
+&lt;h2>Behaviors&lt;span class="hx:absolute hx:-mt-20" id="behaviors">&lt;/span>
+&lt;a href="#behaviors" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;h3>На входе (Headend)&lt;span class="hx:absolute hx:-mt-20" id="на-входе-headend">&lt;/span>
+&lt;a href="#%d0%bd%d0%b0-%d0%b2%d1%85%d0%be%d0%b4%d0%b5-headend" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>H.Encaps - добавляет внешний IPv6 header и SRH. Оригинальный пакет становится payload.&lt;/p>
+&lt;p>H.Encaps.Red - то же самое, но первый SID не дублируется в SRH (только в DA). Экономит 16 байт.&lt;/p>
+&lt;p>H.Encaps.L2 - для L2 фреймов.&lt;/p>
+&lt;h3>Транзит&lt;span class="hx:absolute hx:-mt-20" id="транзит">&lt;/span>
+&lt;a href="#%d1%82%d1%80%d0%b0%d0%bd%d0%b7%d0%b8%d1%82" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>End - базовый. Обновляет SL и DA, forwarding дальше.&lt;/p>
+&lt;p>End.X - то же + форсирует конкретный nexthop (как Adjacency SID).&lt;/p>
+&lt;h3>L3VPN&lt;span class="hx:absolute hx:-mt-20" id="l3vpn">&lt;/span>
+&lt;a href="#l3vpn" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>End.DT4 - снимает внешний IPv6, делает lookup в IPv4 VRF. Аналог per-VRF label.&lt;/p>
+&lt;p>End.DT6 - то же для IPv6 VRF.&lt;/p>
+&lt;p>End.DT46 - один SID для dual-stack VRF. Смотрит inner protocol.&lt;/p>
+&lt;h3>L2VPN&lt;span class="hx:absolute hx:-mt-20" id="l2vpn">&lt;/span>
+&lt;a href="#l2vpn" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>End.DX2 - снимает IPv6, выдает L2 frame на конкретный AC. Для VPWS.&lt;/p>
+&lt;p>End.DT2U - снимает IPv6, MAC lookup в bridge table. Для ELAN unicast.&lt;/p>
+&lt;p>End.DT2M - для BUM трафика.&lt;/p>
+&lt;h2>Micro-SID&lt;span class="hx:absolute hx:-mt-20" id="micro-sid">&lt;/span>
+&lt;a href="#micro-sid" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Проблема полных SID - overhead. 5 хопов = 80 байт SID-листа.&lt;/p>
+&lt;p>uSID - компрессия. В один 128-битный carrier влезает до 6 микро-SID по 16 бит.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>|&amp;lt;-- Block 32 --&amp;gt;|&amp;lt;-- uSID1 16 --&amp;gt;|&amp;lt;-- uSID2 16 --&amp;gt;|...|&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Те же 5 хопов = 16 байт.&lt;/p>
+&lt;p>uN behavior - сдвигает uSID влево и делает lookup по новому DA.&lt;/p>
+&lt;p>Если больше 6 uSID - добавляется SRH с дополнительными carriers.&lt;/p>
+&lt;h2>L3VPN&lt;span class="hx:absolute hx:-mt-20" id="l3vpn-1">&lt;/span>
+&lt;a href="#l3vpn-1" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Underlay: IS-IS анонсирует locators.&lt;/p>
+&lt;p>Overlay: MP-BGP VPNv4/VPNv6 между PE.&lt;/p>
+&lt;p>На PE создается VRF, назначается locator, автоматически аллоцируется End.DT4/DT6 SID.&lt;/p>
+&lt;p>Путь пакета:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>CE -&amp;gt; Ingress PE: VRF lookup, находит remote PE
+Ingress PE: H.Encaps, DA = End.DT4 SID удаленного PE
+Transit P: обычный IPv6 forwarding по DA (это же locator prefix)
+Egress PE: видит свой End.DT4, decap, lookup в VRF
+Egress PE -&amp;gt; CE&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>EVPN&lt;span class="hx:absolute hx:-mt-20" id="evpn">&lt;/span>
+&lt;a href="#evpn" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>VPWS (E-Line) - point-to-point. EVPN Type 1 route несет End.DX2 SID.&lt;/p>
+&lt;p>ELAN (E-LAN) - multipoint. EVPN Type 2 (MAC/IP) несет End.DT2U SID. MAC learning через BGP, не flooding.&lt;/p>
+&lt;p>IRB - L2 и L3 вместе. End.DT2U для bridging внутри VLAN, End.DT46 для routing между VLAN. Anycast gateway на всех leaf.&lt;/p>
+&lt;h2>DC Fabric&lt;span class="hx:absolute hx:-mt-20" id="dc-fabric">&lt;/span>
+&lt;a href="#dc-fabric" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Spine-Leaf архитектура.&lt;/p>
+&lt;p>Spine - чистый P router. IPv6 forwarding, IS-IS с SRv6, никаких VRF.&lt;/p>
+&lt;p>Leaf - PE router. VRF для тенантов, locator, BGP EVPN с другими leaf.&lt;/p>
+&lt;p>Locators:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>Leaf-1: 2001:db8:0:1::/64
+Leaf-2: 2001:db8:0:2::/64
+Leaf-3: 2001:db8:0:3::/64&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Spine видит summary 2001:db8::/48 и locator каждого leaf.&lt;/p>
+&lt;p>Каждый VRF на leaf получает свой function:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>Leaf-1, Tenant-A: 2001:db8:0:1::100 (End.DT46)
+Leaf-1, Tenant-B: 2001:db8:0:1::200 (End.DT46)&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>DCI&lt;span class="hx:absolute hx:-mt-20" id="dci">&lt;/span>
+&lt;a href="#dci" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Вариант 1 - SRv6 core между DC:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>DC-1 Fabric &amp;lt;-&amp;gt; SRv6 WAN &amp;lt;-&amp;gt; DC-2 Fabric&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Border leaf анонсирует EVPN routes в core. End-to-end SRv6, никаких gateway.&lt;/p>
+&lt;p>Вариант 2 - DC на VXLAN, core на SRv6:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>VXLAN Fabric &amp;lt;-&amp;gt; BorderPE &amp;lt;-&amp;gt; SRv6 Core&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>BorderPE терминирует VXLAN, импортирует routes в VRF, реанонсирует в L3VPN SRv6.&lt;/p>
+&lt;h2>Best Practices&lt;span class="hx:absolute hx:-mt-20" id="best-practices">&lt;/span>
+&lt;a href="#best-practices" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;h3>Адресация&lt;span class="hx:absolute hx:-mt-20" id="адресация">&lt;/span>
+&lt;a href="#%d0%b0%d0%b4%d1%80%d0%b5%d1%81%d0%b0%d1%86%d0%b8%d1%8f" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;ul>
+&lt;li>Выделить минимум /32 block под SRv6 (лучше /28 с запасом)&lt;/li>
+&lt;li>Зарезервировать один nibble (4 бита) под Flex-Algo ID&lt;/li>
+&lt;li>Flex-Algo кодировать в старших битах - так проще суммаризация&lt;/li>
+&lt;li>Планировать иерархию: Block -&amp;gt; Region -&amp;gt; POD -&amp;gt; Node&lt;/li>
+&lt;li>На границе POD суммаризировать до /48&lt;/li>
+&lt;/ul>
+&lt;p>Пример иерархии:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>2001:db8::/32 - весь SRv6 домен
+2001:db8:0::/40 - Flex-Algo 0 (default)
+2001:db8:1::/40 - Flex-Algo 1 (low-latency)
+2001:db8:0:10::/48 - POD-1
+2001:db8:0:10:1::/64 - Leaf-1 в POD-1&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h3>Locators&lt;span class="hx:absolute hx:-mt-20" id="locators">&lt;/span>
+&lt;a href="#locators" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;ul>
+&lt;li>/48 для uSID, /64 для full-length SID&lt;/li>
+&lt;li>Одинаковая длина locator во всем домене&lt;/li>
+&lt;li>Один locator на Flex-Algo (разные пути - разные locators)&lt;/li>
+&lt;li>Не менять locator после деплоя (ломает все SID)&lt;/li>
+&lt;/ul>
+&lt;h3>Function Allocation&lt;span class="hx:absolute hx:-mt-20" id="function-allocation">&lt;/span>
+&lt;a href="#function-allocation" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;ul>
+&lt;li>Разделить function space на static и dynamic ranges&lt;/li>
+&lt;li>Static (например 0x0001-0x00FF) - для manually assigned SID&lt;/li>
+&lt;li>Dynamic (0x0100-0xFFFF) - для auto-allocated (VRF, EVPN)&lt;/li>
+&lt;li>Документировать static assignments&lt;/li>
+&lt;/ul>
+&lt;h3>Underlay&lt;span class="hx:absolute hx:-mt-20" id="underlay">&lt;/span>
+&lt;a href="#underlay" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;ul>
+&lt;li>IS-IS предпочтительнее OSPF (лучше SRv6 extensions, TLV flexibility)&lt;/li>
+&lt;li>Отдельный IS-IS process/instance для SRv6 (не мешать с legacy)&lt;/li>
+&lt;li>TI-LFA на всех интерфейсах&lt;/li>
+&lt;li>BFD с aggressive timers (50ms x 3)&lt;/li>
+&lt;li>Micro-loop avoidance если большой домен&lt;/li>
+&lt;/ul>
+&lt;h3>Overlay&lt;span class="hx:absolute hx:-mt-20" id="overlay">&lt;/span>
+&lt;a href="#overlay" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;ul>
+&lt;li>BGP EVPN для L2/L3 services&lt;/li>
+&lt;li>Минимум 2 Route Reflector (redundancy)&lt;/li>
+&lt;li>RR в отдельной plane от data traffic&lt;/li>
+&lt;li>RT-based filtering - import только нужные VRF&lt;/li>
+&lt;li>Не анонсировать все во все (full mesh RT = проблемы)&lt;/li>
+&lt;/ul>
+&lt;h3>MTU&lt;span class="hx:absolute hx:-mt-20" id="mtu">&lt;/span>
+&lt;a href="#mtu" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;ul>
+&lt;li>Базовый overhead: IPv6 header 40 байт&lt;/li>
+&lt;li>SRH: 8 байт header + 16 байт на каждый SID&lt;/li>
+&lt;li>С uSID: 8 байт header + 16 байт carrier (до 6 uSID)&lt;/li>
+&lt;li>Планировать MTU 9216 на fabric, 9000 к серверам&lt;/li>
+&lt;li>Проверять path MTU до включения сервисов&lt;/li>
+&lt;/ul>
+&lt;h3>Мониторинг&lt;span class="hx:absolute hx:-mt-20" id="мониторинг">&lt;/span>
+&lt;a href="#%d0%bc%d0%be%d0%bd%d0%b8%d1%82%d0%be%d1%80%d0%b8%d0%bd%d0%b3" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;ul>
+&lt;li>Performance Measurement для delay/loss на SRv6 paths&lt;/li>
+&lt;li>Delay metrics как input для Flex-Algo&lt;/li>
+&lt;li>TWAMP-Light между PE для SLA мониторинга&lt;/li>
+&lt;li>Отслеживать SID allocation (не закончился ли function range)&lt;/li>
+&lt;/ul>
+&lt;h2>RFC&lt;span class="hx:absolute hx:-mt-20" id="rfc">&lt;/span>
+&lt;a href="#rfc" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>RFC 8986 - SRv6 Network Programming&lt;/li>
+&lt;li>RFC 8754 - Segment Routing Header&lt;/li>
+&lt;li>RFC 9252 - BGP Overlay Services over SRv6&lt;/li>
+&lt;li>RFC 9602 - SRv6 SID Addressing&lt;/li>
+&lt;/ul></description></item></channel></rss>

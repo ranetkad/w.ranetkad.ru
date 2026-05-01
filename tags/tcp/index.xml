@@ -1,0 +1,383 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Tcp</title><link>https://w.ranetkad.ru/tags/tcp/</link><description>Recent content in Tcp on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/tcp/index.xml" rel="self" type="application/rss+xml"/><item><title>TCP</title><link>https://w.ranetkad.ru/networking/tcp/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/tcp/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Transmission Control Protocol - надежный транспортный протокол с гарантией доставки и порядка.
+Использует соединения (connection-oriented), подтверждения (ACK), контроль потока (flow control) и контроль перегрузок (congestion control).
+Определен в RFC 793 (1981), актуальная версия - RFC 9293.&lt;/p>
+&lt;h2>Заголовок TCP&lt;span class="hx:absolute hx:-mt-20" id="заголовок-tcp">&lt;/span>
+&lt;a href="#%d0%b7%d0%b0%d0%b3%d0%be%d0%bb%d0%be%d0%b2%d0%be%d0%ba-tcp" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code> 0 1 2 3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
+| Source Port | Destination Port |
+&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
+| Sequence Number |
+&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
+| Acknowledgment Number |
+&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
+| Data | |U|A|P|R|S|F| |
+| Offset| Reserved |R|C|S|S|Y|I| Window |
+| | |G|K|H|T|N|N| |
+&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
+| Checksum | Urgent Pointer |
+&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
+| Options | Padding |
+&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Флаги (6 бит):&lt;/p>
+&lt;ul>
+&lt;li>SYN - синхронизация sequence numbers, установка соединения&lt;/li>
+&lt;li>ACK - поле Acknowledgment Number валидно&lt;/li>
+&lt;li>FIN - отправитель завершает передачу&lt;/li>
+&lt;li>RST - сброс соединения&lt;/li>
+&lt;li>PSH - передать данные приложению немедленно&lt;/li>
+&lt;li>URG - поле Urgent Pointer валидно&lt;/li>
+&lt;/ul>
+&lt;h2>Установка соединения (3-way handshake)&lt;span class="hx:absolute hx:-mt-20" id="установка-соединения-3-way-handshake">&lt;/span>
+&lt;a href="#%d1%83%d1%81%d1%82%d0%b0%d0%bd%d0%be%d0%b2%d0%ba%d0%b0-%d1%81%d0%be%d0%b5%d0%b4%d0%b8%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f-3-way-handshake" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>Client Server
+| |
+|-------- SYN -----------&amp;gt;| seq=x
+| |
+|&amp;lt;----- SYN&amp;#43;ACK ----------| seq=y, ack=x&amp;#43;1
+| |
+|-------- ACK -----------&amp;gt;| seq=x&amp;#43;1, ack=y&amp;#43;1
+| |&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Цель: обмен начальными sequence numbers, предотвращение дубликатов старых соединений.&lt;/p>
+&lt;h2>Закрытие соединения (4-way handshake)&lt;span class="hx:absolute hx:-mt-20" id="закрытие-соединения-4-way-handshake">&lt;/span>
+&lt;a href="#%d0%b7%d0%b0%d0%ba%d1%80%d1%8b%d1%82%d0%b8%d0%b5-%d1%81%d0%be%d0%b5%d0%b4%d0%b8%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f-4-way-handshake" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>Client Server
+| |
+|-------- FIN -----------&amp;gt;| active close
+| |
+|&amp;lt;------- ACK ------------|
+| |
+|&amp;lt;------- FIN ------------| passive close
+| |
+|-------- ACK -----------&amp;gt;|
+| |
+| (TIME_WAIT 2*MSL) |&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Состояния TCP&lt;span class="hx:absolute hx:-mt-20" id="состояния-tcp">&lt;/span>
+&lt;a href="#%d1%81%d0%be%d1%81%d1%82%d0%be%d1%8f%d0%bd%d0%b8%d1%8f-tcp" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>LISTEN - ожидание входящих соединений (passive open)
+SYN_SENT - отправлен SYN, ждем SYN+ACK
+SYN_RECEIVED - получен SYN, отправлен SYN+ACK
+ESTABLISHED - соединение установлено, передача данных
+FIN_WAIT_1 - отправлен FIN, ждем ACK
+FIN_WAIT_2 - получен ACK на FIN, ждем FIN от другой стороны
+CLOSE_WAIT - получен FIN, ждем close() от приложения
+CLOSING - обе стороны отправили FIN одновременно
+LAST_ACK - после отправки FIN в ответ на полученный FIN
+TIME_WAIT - ждем 2*MSL (обычно 2 минуты) перед полным закрытием&lt;/p>
+&lt;h2>Контроль потока (Flow Control)&lt;span class="hx:absolute hx:-mt-20" id="контроль-потока-flow-control">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%bd%d1%82%d1%80%d0%be%d0%bb%d1%8c-%d0%bf%d0%be%d1%82%d0%be%d0%ba%d0%b0-flow-control" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Sliding Window - получатель сообщает в поле Window сколько байт готов принять.
+Отправитель не может отправить больше, чем разрешено окном.&lt;/p>
+&lt;p>Window = 0: отправитель останавливается и шлет probe-пакеты (persist timer).&lt;/p>
+&lt;p>Window Scaling (RFC 1323): опция при handshake, масштабирует 16-битное поле Window до 1 GB.&lt;/p>
+&lt;h2>Контроль перегрузок (Congestion Control)&lt;span class="hx:absolute hx:-mt-20" id="контроль-перегрузок-congestion-control">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%bd%d1%82%d1%80%d0%be%d0%bb%d1%8c-%d0%bf%d0%b5%d1%80%d0%b5%d0%b3%d1%80%d1%83%d0%b7%d0%be%d0%ba-congestion-control" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>RFC 5681 определяет 4 алгоритма:&lt;/p>
+&lt;p>&lt;strong>Slow Start&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>cwnd (congestion window) начинается с малого значения&lt;/li>
+&lt;li>cwnd увеличивается на 1 MSS за каждый ACK&lt;/li>
+&lt;li>Экспоненциальный рост до ssthresh&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Congestion Avoidance&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>Когда cwnd &amp;gt;= ssthresh&lt;/li>
+&lt;li>cwnd увеличивается на ~1 MSS за RTT (линейный рост)&lt;/li>
+&lt;li>AIMD: Additive Increase, Multiplicative Decrease&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Fast Retransmit&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>3 duplicate ACK -&amp;gt; немедленная ретрансмиссия без ожидания таймера&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Fast Recovery&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>После fast retransmit: ssthresh = cwnd/2, cwnd = ssthresh + 3*MSS&lt;/li>
+&lt;/ul>
+&lt;h2>Команды&lt;span class="hx:absolute hx:-mt-20" id="команды">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ss -t&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Показать TCP-соединения.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ss -tlnp&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Показать слушающие TCP-порты с процессами.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ss -s&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Сводка по состояниям TCP (estab, timewait, и т.д.).&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">netstat -nat &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{print $6}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> sort &lt;span class="p">|&lt;/span> uniq -c &lt;span class="p">|&lt;/span> sort -rn&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Подсчет соединений по состояниям.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tcpdump -i eth0 tcp port &lt;span class="m">80&lt;/span> -n&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Захват TCP-трафика на порту 80.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tcpdump -i eth0 &lt;span class="s1">&amp;#39;tcp[tcpflags] &amp;amp; tcp-syn != 0&amp;#39;&lt;/span> -n&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Захват только SYN-пакетов.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tcpdump -i any -w capture.pcap host 10.0.0.1&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Запись в файл для анализа в Wireshark.&lt;/p>
+&lt;h2>Примеры&lt;span class="hx:absolute hx:-mt-20" id="примеры">&lt;/span>
+&lt;a href="#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d1%80%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Проверка состояния соединений на сервере:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ss -tan state established
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ss -tan state time-wait
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ss -tan state close-wait&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Много CLOSE_WAIT - приложение не закрывает сокеты (баг).
+Много TIME_WAIT - много коротких соединений (норма для HTTP).&lt;/p>
+&lt;p>Просмотр TCP-параметров ядра:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sysctl net.ipv4.tcp_fin_timeout
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl net.ipv4.tcp_keepalive_time
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl net.ipv4.tcp_keepalive_intvl
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl net.ipv4.tcp_keepalive_probes&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Изменение параметров:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Уменьшить FIN_WAIT_2 timeout (по умолчанию 60)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl -w net.ipv4.tcp_fin_timeout&lt;span class="o">=&lt;/span>&lt;span class="m">15&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Keepalive: проверять через 5 минут вместо 2 часов&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl -w net.ipv4.tcp_keepalive_time&lt;span class="o">=&lt;/span>&lt;span class="m">300&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Для постоянных изменений - добавить в /etc/sysctl.conf:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>net.ipv4.tcp_fin_timeout = 15
+net.ipv4.tcp_keepalive_time = 300
+net.ipv4.tcp_keepalive_intvl = 15
+net.ipv4.tcp_keepalive_probes = 5&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Применить: &lt;code>sysctl -p&lt;/code>&lt;/p>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/network-stack/">Network stack&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/netfilter/">netfilter&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

@@ -1,0 +1,134 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Monitoring</title><link>https://w.ranetkad.ru/tags/monitoring/</link><description>Recent content in Monitoring on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/monitoring/index.xml" rel="self" type="application/rss+xml"/><item><title>RIPE Atlas</title><link>https://w.ranetkad.ru/linux/ripe-atlas/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/linux/ripe-atlas/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Программная probe для сети измерений RIPE NCC. Выполняет ping, traceroute, DNS, SSL/TLS, NTP, HTTP измерения по заданиям из облака.&lt;/p>
+&lt;h2>Установка&lt;span class="hx:absolute hx:-mt-20" id="установка">&lt;/span>
+&lt;a href="#%d1%83%d1%81%d1%82%d0%b0%d0%bd%d0%be%d0%b2%d0%ba%d0%b0" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;h3>Debian/Ubuntu&lt;span class="hx:absolute hx:-mt-20" id="debianubuntu">&lt;/span>
+&lt;a href="#debianubuntu" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ARCH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>dpkg --print-architecture&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">CODENAME&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>. /etc/os-release &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$VERSION_CODENAME&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">wget https://ftp.ripe.net/ripe/atlas/software-probe/debian/dists/&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CODENAME&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>/main/binary-&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$ARCH&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>/ripe-atlas-repo_1.5-5_all.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo dpkg -i ripe-atlas-repo_1.5-5_all.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo apt update &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> sudo apt install ripe-atlas-probe -y&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h3>RHEL/CentOS&lt;span class="hx:absolute hx:-mt-20" id="rhelcentos">&lt;/span>
+&lt;a href="#rhelcentos" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">EL_VER&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>. /etc/os-release &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="nv">$PLATFORM_ID&lt;/span> &lt;span class="p">|&lt;/span> cut -d&lt;span class="s1">&amp;#39;:&amp;#39;&lt;/span> -f2&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">curl -fO https://ftp.ripe.net/ripe/atlas/software-probe/&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$EL_VER&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>/noarch/ripe-atlas-repo-1.5-5.&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$EL_VER&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>.noarch.rpm
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo rpm -Uvh ripe-atlas-repo-1.5-5.&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$EL_VER&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>.noarch.rpm
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo dnf install ripe-atlas-probe -y&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Запуск&lt;span class="hx:absolute hx:-mt-20" id="запуск">&lt;/span>
+&lt;a href="#%d0%b7%d0%b0%d0%bf%d1%83%d1%81%d0%ba" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl &lt;span class="nb">enable&lt;/span> --now ripe-atlas&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Регистрация&lt;span class="hx:absolute hx:-mt-20" id="регистрация">&lt;/span>
+&lt;a href="#%d1%80%d0%b5%d0%b3%d0%b8%d1%81%d1%82%d1%80%d0%b0%d1%86%d0%b8%d1%8f" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cat /etc/ripe-atlas/probe_key.pub&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Скопировать ключ -&amp;gt; &lt;a href="https://atlas.ripe.net/apply/swprobe/"target="_blank" rel="noopener">https://atlas.ripe.net/apply/swprobe/&lt;/a> -&amp;gt; вставить -&amp;gt; отправить.&lt;/p>
+&lt;h2>Проверка&lt;span class="hx:absolute hx:-mt-20" id="проверка">&lt;/span>
+&lt;a href="#%d0%bf%d1%80%d0%be%d0%b2%d0%b5%d1%80%d0%ba%d0%b0" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo journalctl -u ripe-atlas &lt;span class="p">|&lt;/span> grep SESSION_ID&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Есть SESSION_ID - probe подключился.&lt;/p>
+&lt;h2>Ссылки&lt;span class="hx:absolute hx:-mt-20" id="ссылки">&lt;/span>
+&lt;a href="#%d1%81%d1%81%d1%8b%d0%bb%d0%ba%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://github.com/RIPE-NCC/ripe-atlas-software-probe"target="_blank" rel="noopener">https://github.com/RIPE-NCC/ripe-atlas-software-probe&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://atlas.ripe.net/apply/swprobe/"target="_blank" rel="noopener">https://atlas.ripe.net/apply/swprobe/&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

@@ -1,0 +1,653 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Kernel</title><link>https://w.ranetkad.ru/tags/kernel/</link><description>Recent content in Kernel on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/kernel/index.xml" rel="self" type="application/rss+xml"/><item><title>Network stack</title><link>https://w.ranetkad.ru/linux/network-stack/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/linux/network-stack/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Пакет проходит: Провод -&amp;gt; NIC -&amp;gt; DMA -&amp;gt; Ring Buffer -&amp;gt; Hard IRQ -&amp;gt; Soft IRQ (NAPI) -&amp;gt; Сетевой стек ядра -&amp;gt; Socket Buffer -&amp;gt; Userspace.&lt;/p>
+&lt;p>Ключевые механизмы: DMA (без участия CPU), прерывания (hard/soft), NAPI (polling вместо interrupt storm), sk_buff (структура пакета в ядре).&lt;/p>
+&lt;h2>Полный путь пакета (RX)&lt;span class="hx:absolute hx:-mt-20" id="полный-путь-пакета-rx">&lt;/span>
+&lt;a href="#%d0%bf%d0%be%d0%bb%d0%bd%d1%8b%d0%b9-%d0%bf%d1%83%d1%82%d1%8c-%d0%bf%d0%b0%d0%ba%d0%b5%d1%82%d0%b0-rx" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>┌─────────────────────────────────────────────────────────────────┐
+│ ФИЗИЧЕСКИЙ УРОВЕНЬ │
+├─────────────────────────────────────────────────────────────────┤
+│ Провод/оптика │
+│ ↓ │
+│ Трансивер (PHY) - преобразование сигнала │
+│ ↓ │
+│ MAC (Media Access Control) - проверка FCS, извлечение фрейма │
+└─────────────────────────────────────────────────────────────────┘
+↓
+┌─────────────────────────────────────────────────────────────────┐
+│ NIC (Network Interface Card) │
+├─────────────────────────────────────────────────────────────────┤
+│ 1. Принимает фрейм в hardware buffer │
+│ 2. Проверяет checksum (если поддерживается) │
+│ 3. DMA: копирует данные в Ring Buffer (RAM) │
+│ 4. Обновляет RX descriptor │
+│ 5. Генерирует Hardware Interrupt │
+└─────────────────────────────────────────────────────────────────┘
+↓
+┌─────────────────────────────────────────────────────────────────┐
+│ HARD IRQ (аппаратное прерывание) │
+├─────────────────────────────────────────────────────────────────┤
+│ CPU прерывается, выполняет interrupt handler драйвера: │
+│ - Отключает прерывания от NIC (чтобы не было interrupt storm) │
+│ - Вызывает napi_schedule() - планирует обработку │
+│ - Возвращает управление (минимум работы) │
+└─────────────────────────────────────────────────────────────────┘
+↓
+┌─────────────────────────────────────────────────────────────────┐
+│ SOFT IRQ / NAPI (отложенная обработка) │
+├─────────────────────────────────────────────────────────────────┤
+│ ksoftirqd обрабатывает NET_RX_SOFTIRQ: │
+│ - net_rx_action() вызывает poll-функцию драйвера │
+│ - Драйвер читает пакеты из Ring Buffer (polling, не interrupt) │
+│ - Создает sk_buff для каждого пакета │
+│ - Передает в napi_gro_receive() или netif_receive_skb() │
+│ - Когда Ring Buffer пуст - включает прерывания обратно │
+└─────────────────────────────────────────────────────────────────┘
+↓
+┌─────────────────────────────────────────────────────────────────┐
+│ СЕТЕВОЙ СТЕК ЯДРА │
+├─────────────────────────────────────────────────────────────────┤
+│ netif_receive_skb() │
+│ ↓ │
+│ Определяет протокол L3 (ETH_P_IP, ETH_P_IPV6...) │
+│ ↓ │
+│ ip_rcv() - обработка IP │
+│ - Проверка заголовка, checksum │
+│ - PREROUTING (netfilter/iptables) │
+│ - ip_route_input() - lookup маршрута │
+│ - INPUT или FORWARD │
+│ ↓ │
+│ tcp_v4_rcv() - обработка TCP │
+│ - Поиск сокета по 4-tuple (src ip:port, dst ip:port) │
+│ - TCP state machine (ACK, sequence numbers) │
+│ - Добавление в sk_receive_queue сокета │
+│ ↓ │
+│ sock_def_readable() - будит процесс │
+└─────────────────────────────────────────────────────────────────┘
+↓
+┌─────────────────────────────────────────────────────────────────┐
+│ USERSPACE │
+├─────────────────────────────────────────────────────────────────┤
+│ Процесс разблокируется (epoll_wait/select/read) │
+│ ↓ │
+│ recv()/read() - системный вызов │
+│ ↓ │
+│ copy_to_user() - копирование из sk_receive_queue в userspace │
+│ ↓ │
+│ Данные доступны приложению │
+└─────────────────────────────────────────────────────────────────┘&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Ring Buffer&lt;span class="hx:absolute hx:-mt-20" id="ring-buffer">&lt;/span>
+&lt;a href="#ring-buffer" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Кольцевой буфер в RAM. NIC пишет туда через DMA. Драйвер читает оттуда.&lt;/p>
+&lt;p>Структура:&lt;/p>
+&lt;ul>
+&lt;li>RX descriptor ring - массив дескрипторов (указатели на буферы + метаданные)&lt;/li>
+&lt;li>Буферы данных - память под сами пакеты&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code> ┌───┬───┬───┬───┬───┬───┬───┬───┐
+│ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ &amp;lt;- дескрипторы
+└─┬─┴─┬─┴───┴───┴───┴─┬─┴─┬─┴───┘
+│ │ │ │
+↓ ↓ ↓ ↓
+[buf][buf] [buf][buf] &amp;lt;- буферы с данными
+↑ ↑
+│ │
+HEAD TAIL
+(NIC пишет) (драйвер читает)&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Переполнение (overflow) - пакеты теряются. Счетчик: &lt;code>ethtool -S eth0 | grep rx_missed&lt;/code>.&lt;/p>
+&lt;h2>sk_buff (skb)&lt;span class="hx:absolute hx:-mt-20" id="sk_buff-skb">&lt;/span>
+&lt;a href="#sk_buff-skb" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Главная структура для пакета в ядре. Не содержит данные напрямую - только метаданные и указатели.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>struct sk_buff {
+/* Указатели на заголовки */
+transport_header -&amp;gt; TCP/UDP header
+network_header -&amp;gt; IP header
+mac_header -&amp;gt; Ethernet header
+/* Размеры */
+len -&amp;gt; общий размер данных
+data_len -&amp;gt; размер в page fragments
+/* Указатели на данные */
+head -&amp;gt; начало буфера
+data -&amp;gt; начало данных
+tail -&amp;gt; конец данных
+end -&amp;gt; конец буфера
+/* Очередь */
+next, prev -&amp;gt; двусвязный список
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Hard IRQ vs Soft IRQ&lt;span class="hx:absolute hx:-mt-20" id="hard-irq-vs-soft-irq">&lt;/span>
+&lt;a href="#hard-irq-vs-soft-irq" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;strong>Hard IRQ (top half)&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Вызывается железом немедленно&lt;/li>
+&lt;li>Прерывает текущую работу CPU&lt;/li>
+&lt;li>Нельзя блокироваться&lt;/li>
+&lt;li>Минимум работы: acknowledge + schedule soft irq&lt;/li>
+&lt;li>Другие прерывания заблокированы&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Soft IRQ (bottom half)&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>Выполняется ksoftirqd или после hard irq&lt;/li>
+&lt;li>Можно прерывать&lt;/li>
+&lt;li>Основная обработка пакетов&lt;/li>
+&lt;li>Ограничен по времени и количеству пакетов&lt;/li>
+&lt;/ul>
+&lt;h2>NAPI (New API)&lt;span class="hx:absolute hx:-mt-20" id="napi-new-api">&lt;/span>
+&lt;a href="#napi-new-api" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Проблема: при высокой нагрузке - interrupt storm (тысячи прерываний в секунду).&lt;/p>
+&lt;p>Решение NAPI:&lt;/p>
+&lt;ol>
+&lt;li>Первое прерывание будит обработчик&lt;/li>
+&lt;li>Обработчик отключает прерывания&lt;/li>
+&lt;li>Polling: читает пакеты из ring buffer пока есть&lt;/li>
+&lt;li>Когда ring buffer пуст - включает прерывания&lt;/li>
+&lt;/ol>
+&lt;p>При низкой нагрузке: 1 прерывание на пакет.
+При высокой: 1 прерывание на множество пакетов.&lt;/p>
+&lt;h2>Interrupt Coalescing&lt;span class="hx:absolute hx:-mt-20" id="interrupt-coalescing">&lt;/span>
+&lt;a href="#interrupt-coalescing" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>NIC накапливает несколько пакетов перед генерацией прерывания.&lt;/p>
+&lt;p>Параметры:&lt;/p>
+&lt;ul>
+&lt;li>rx-usecs: ждать N микросекунд&lt;/li>
+&lt;li>rx-frames: ждать N пакетов&lt;/li>
+&lt;/ul>
+&lt;p>Компромисс: меньше прерываний = выше throughput, но выше latency.&lt;/p>
+&lt;h2>Hardware Offloads&lt;span class="hx:absolute hx:-mt-20" id="hardware-offloads">&lt;/span>
+&lt;a href="#hardware-offloads" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>NIC берет на себя часть работы CPU. Без offloads 100G невозможен - CPU не успеет.&lt;/p>
+&lt;p>&lt;strong>Checksum Offload&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>rx-checksumming: NIC проверяет checksum, ядро не пересчитывает&lt;/li>
+&lt;li>tx-checksumming: NIC считает checksum при отправке&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Segmentation Offload&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>TSO (TCP Segmentation Offload): приложение отдает большой chunk (64KB), NIC сам нарезает на MSS-сегменты&lt;/li>
+&lt;li>GSO (Generic Segmentation Offload): то же, но в софте (fallback если нет TSO)&lt;/li>
+&lt;li>UFO (UDP Fragmentation Offload): аналог для UDP&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Receive Offload&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>GRO (Generic Receive Offload): склеивает мелкие пакеты одного потока в большие перед передачей в стек&lt;/li>
+&lt;li>LRO (Large Receive Offload): аналог на железе (агрессивнее, может ломать routing/bridging)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>RSS (Receive Side Scaling)&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>NIC хеширует 5-tuple (src/dst IP, src/dst port, protocol)&lt;/li>
+&lt;li>Распределяет пакеты по разным RX-очередям&lt;/li>
+&lt;li>Каждая очередь - свой CPU&lt;/li>
+&lt;li>100G карта: 32-128 очередей = параллельная обработка&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Flow Director / ATR&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>NIC запоминает flow и отправляет на тот же CPU где сокет&lt;/li>
+&lt;li>Лучше cache locality&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Посмотреть что включено&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -k eth0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Включить/выключить&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -K eth0 tso on
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -K eth0 gro on
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -K eth0 rx-checksumming on&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Типичный вывод &lt;code>ethtool -k&lt;/code>:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>rx-checksumming: on
+tx-checksumming: on
+scatter-gather: on
+tcp-segmentation-offload: on
+generic-receive-offload: on
+large-receive-offload: off # обычно off, ломает forwarding
+receive-hashing: on # RSS&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>&lt;strong>Что дает offload:&lt;/strong>&lt;/p>
+&lt;p>Без TSO (CPU нарезает):&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>App: 64KB данных
+↓
+Kernel: создает ~44 sk_buff по 1460 байт
+↓
+NIC: отправляет 44 пакета&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>С TSO (NIC нарезает):&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>App: 64KB данных
+↓
+Kernel: создает 1 большой sk_buff
+↓
+NIC: сам нарезает и отправляет 44 пакета&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Экономия: меньше sk_buff allocations, меньше проходов по стеку.&lt;/p>
+&lt;h2>Команды&lt;span class="hx:absolute hx:-mt-20" id="команды">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ethtool -g eth0&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Показать размер ring buffer (текущий и максимальный).&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ethtool -G eth0 rx &lt;span class="m">4096&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Увеличить RX ring buffer до 4096.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ethtool -c eth0&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Показать настройки interrupt coalescing.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ethtool -C eth0 rx-usecs &lt;span class="m">100&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Установить задержку прерывания 100 мкс.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ethtool -C eth0 adaptive-rx on&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Включить адаптивный coalescing.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ethtool -S eth0 &lt;span class="p">|&lt;/span> grep -E &lt;span class="s2">&amp;#34;rx_missed|rx_dropped|rx_errors&amp;#34;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Проверить потери пакетов на уровне NIC.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cat /proc/interrupts &lt;span class="p">|&lt;/span> grep eth0&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Прерывания по CPU для сетевой карты.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cat /proc/net/softnet_stat&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Статистика softirq (столбцы: processed, dropped, time_squeeze).&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cat /proc/softirqs &lt;span class="p">|&lt;/span> grep NET&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Счетчики NET_RX_SOFTIRQ и NET_TX_SOFTIRQ.&lt;/p>
+&lt;h2>Примеры&lt;span class="hx:absolute hx:-mt-20" id="примеры">&lt;/span>
+&lt;a href="#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d1%80%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Диагностика потерь пакетов:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 1. Потери на NIC (ring buffer overflow)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -S eth0 &lt;span class="p">|&lt;/span> grep rx_missed
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 2. Потери на softirq (не успевает обработать)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cat /proc/net/softnet_stat
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Второй столбец - dropped, третий - time_squeeze&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 3. Потери на сокете&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ss -tmpn &lt;span class="p">|&lt;/span> grep -A1 ESTAB
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Смотреть Recv-Q&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Тюнинг для высокой нагрузки:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Увеличить ring buffer&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -G eth0 rx &lt;span class="m">4096&lt;/span> tx &lt;span class="m">4096&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Увеличить coalescing (throughput важнее latency)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -C eth0 rx-usecs &lt;span class="m">100&lt;/span> rx-frames &lt;span class="m">64&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Увеличить backlog (сколько пакетов может накопиться до обработки)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl -w net.core.netdev_max_backlog&lt;span class="o">=&lt;/span>&lt;span class="m">10000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Увеличить budget softirq (сколько пакетов за один вызов)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl -w net.core.netdev_budget&lt;span class="o">=&lt;/span>&lt;span class="m">600&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Тюнинг для низкой latency:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Минимальный coalescing&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -C eth0 rx-usecs &lt;span class="m">0&lt;/span> rx-frames &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Или адаптивный&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ethtool -C eth0 adaptive-rx on&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/tcp/">TCP&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/dpdk/">DPDK&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/netfilter/">netfilter&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>FreeBSD vs Linux</title><link>https://w.ranetkad.ru/linux/network-stack/freebsd-vs-linux/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/linux/network-stack/freebsd-vs-linux/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Netflix гонит 400Gb/s с одного сервера на FreeBSD. Почему не Linux? sendfile + KTLS в ядре дают zero-copy до самого NIC. В Linux данные копируются для TLS шифрования в nginx.&lt;/p>
+&lt;h2>Буферы: mbuf vs sk_buff&lt;span class="hx:absolute hx:-mt-20" id="буферы-mbuf-vs-sk_buff">&lt;/span>
+&lt;a href="#%d0%b1%d1%83%d1%84%d0%b5%d1%80%d1%8b-mbuf-vs-sk_buff" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Linux пошел по пути &amp;ldquo;один пакет = один линейный буфер&amp;rdquo;. Проще, меньше pointer chasing, многие операции быстрее. Минус - иногда резервируется лишняя память.&lt;/p>
+&lt;p>FreeBSD использует цепочки mbuf (256 байт) + кластеры (2K/4K/9K). Гибче под разные размеры, но нужен m_pullup() чтобы собрать заголовки в непрерывный блок.&lt;/p>
+&lt;p>На практике разница не критична для большинства задач.&lt;/p>
+&lt;h2>kqueue vs epoll&lt;span class="hx:absolute hx:-mt-20" id="kqueue-vs-epoll">&lt;/span>
+&lt;a href="#kqueue-vs-epoll" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>epoll раздражает тем, что на каждое изменение fd нужен отдельный epoll_ctl(). 100 сокетов поменялось - 100 syscalls.&lt;/p>
+&lt;p>kqueue делает все через один kevent() - и регистрация, и получение событий. Меньше syscalls = меньше overhead.&lt;/p>
+&lt;p>Еще kqueue нормально работает с disk I/O через EVFILT_AIO. В Linux epoll на файлах бесполезен - файл &amp;ldquo;всегда ready&amp;rdquo;, а реально блокируется на чтении с диска.&lt;/p>
+&lt;p>Источник: &lt;a href="https://thamizhelango.medium.com/freebsd-kqueue-vs-linux-epoll-why-kqueue-often-outperforms-and-its-impact-on-network-1ae39afb6e16"target="_blank" rel="noopener">kqueue vs epoll&lt;/a>&lt;/p>
+&lt;h2>sendfile - вот где разница&lt;span class="hx:absolute hx:-mt-20" id="sendfile---вот-где-разница">&lt;/span>
+&lt;a href="#sendfile---%d0%b2%d0%be%d1%82-%d0%b3%d0%b4%d0%b5-%d1%80%d0%b0%d0%b7%d0%bd%d0%b8%d1%86%d0%b0" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>FreeBSD sendfile делает share страниц между buffer cache и mbuf. Данные с диска попадают в cache, оттуда страницы расшариваются до самого NIC. Копирования нет.&lt;/p>
+&lt;p>Плюс он асинхронный - возвращает success до завершения disk I/O. Данные дописываются в сокет позже, порядок сохраняется.&lt;/p>
+&lt;p>Linux sendfile тоже zero-copy, но когда нужен TLS - nginx читает данные в userspace, шифрует, отдает обратно в ядро. Вот тут копирование.&lt;/p>
+&lt;h2>Почему Netflix на FreeBSD&lt;span class="hx:absolute hx:-mt-20" id="почему-netflix-на-freebsd">&lt;/span>
+&lt;a href="#%d0%bf%d0%be%d1%87%d0%b5%d0%bc%d1%83-netflix-%d0%bd%d0%b0-freebsd" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Изначально выбрали потому что TCP/IP стек показывал меньше latency. Потом вложили кучу работы в оптимизации - уходить уже глупо.&lt;/p>
+&lt;p>Главная фишка - KTLS. TLS шифрование перенесли из nginx в ядро. sendfile pipeline сохраняется:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>Без KTLS: Disk -&amp;gt; Cache -&amp;gt; nginx (encrypt) -&amp;gt; Kernel -&amp;gt; NIC
+С KTLS: Disk -&amp;gt; Cache -&amp;gt; Kernel (encrypt) -&amp;gt; NIC&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>В 2022 добавили NIC kTLS offload - шифрование на сетевухе. CPU вообще не трогает данные.&lt;/p>
+&lt;p>Железо для 200Gb/s сервера: AMD EPYC 7502P, 256GB RAM, 4x100GbE Mellanox, 18 NVMe дисков. 200Gb/s это 25GB/s, нужно ~100GB/s memory bandwidth.&lt;/p>
+&lt;p>NUMA siloing тоже их работа - привязка сетевых соединений к NUMA node, локальная аллокация памяти под файлы и crypto буферы. Intel Xeon поднялся с 105Gb/s до 191Gb/s.&lt;/p>
+&lt;p>Источник: &lt;a href="https://freebsdfoundation.org/end-user-stories/netflix-case-study/"target="_blank" rel="noopener">Netflix Case Study&lt;/a>&lt;/p>
+&lt;h2>Когда Linux лучше&lt;span class="hx:absolute hx:-mt-20" id="когда-linux-лучше">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-linux-%d0%bb%d1%83%d1%87%d1%88%d0%b5" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Bulk transfer больших объемов (Science DMZ сценарии). L3 forwarding на много CPU - Linux лучше параллелится. Hardware support шире.&lt;/p>
+&lt;p>io_uring в свежих ядрах может быть быстрее kqueue на некоторых паттернах - полностью асинхронный I/O.&lt;/p>
+&lt;h2>Когда FreeBSD лучше&lt;span class="hx:absolute hx:-mt-20" id="когда-freebsd-лучше">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-freebsd-%d0%bb%d1%83%d1%87%d1%88%d0%b5" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Стриминг статики с TLS. Web-серверы под высокой нагрузкой. Network appliances.&lt;/p>
+&lt;p>Используют Netflix, WhatsApp, Juniper.&lt;/p>
+&lt;p>Источник: &lt;a href="https://klarasystems.com/articles/freebsd-vs-linux-networking/"target="_blank" rel="noopener">Klara Systems&lt;/a>&lt;/p></description></item></channel></rss>

@@ -1,0 +1,451 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Ha</title><link>https://w.ranetkad.ru/tags/ha/</link><description>Recent content in Ha on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/ha/index.xml" rel="self" type="application/rss+xml"/><item><title>Keepalived</title><link>https://w.ranetkad.ru/linux/keepalived/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/linux/keepalived/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Демон для отказоустойчивости на Linux. Реализует VRRP (Virtual Router Redundancy Protocol) - автоматический failover виртуального IP между серверами. Также может выполнять балансировку нагрузки через IPVS (LVS).&lt;/p>
+&lt;p>Основные сценарии:&lt;/p>
+&lt;ul>
+&lt;li>HA для nginx, haproxy, database VIP&lt;/li>
+&lt;li>Активный/резервный кластер из двух нод&lt;/li>
+&lt;li>Балансировка с health checks реальных серверов&lt;/li>
+&lt;/ul>
+&lt;h2>Как работает VRRP&lt;span class="hx:absolute hx:-mt-20" id="как-работает-vrrp">&lt;/span>
+&lt;a href="#%d0%ba%d0%b0%d0%ba-%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%b0%d0%b5%d1%82-vrrp" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>VRRP использует IP protocol 112 (не TCP/UDP).&lt;/p>
+&lt;p>Master отправляет advertisements каждые &lt;code>advert_int&lt;/code> секунд (по умолчанию 1 сек) на multicast 224.0.0.18 (IPv4) или ff02::12 (IPv6).&lt;/p>
+&lt;p>Backup слушает эти пакеты. Если advertisements перестают приходить - backup становится master и забирает VIP.&lt;/p>
+&lt;p>Выборы master:&lt;/p>
+&lt;ul>
+&lt;li>Побеждает нода с большим &lt;code>priority&lt;/code> (1-255)&lt;/li>
+&lt;li>При равном priority - нода с большим IP&lt;/li>
+&lt;/ul>
+&lt;p>Preemption: если упавший master восстановился и его priority выше - он заберет VIP обратно. Отключается через &lt;code>nopreempt&lt;/code>.&lt;/p>
+&lt;h2>Конфигурация&lt;span class="hx:absolute hx:-mt-20" id="конфигурация">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%bd%d1%84%d0%b8%d0%b3%d1%83%d1%80%d0%b0%d1%86%d0%b8%d1%8f" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Файл: &lt;code>/etc/keepalived/keepalived.conf&lt;/code>&lt;/p>
+&lt;h3>Минимальный MASTER/BACKUP&lt;span class="hx:absolute hx:-mt-20" id="минимальный-masterbackup">&lt;/span>
+&lt;a href="#%d0%bc%d0%b8%d0%bd%d0%b8%d0%bc%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d0%b9-masterbackup" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>&lt;strong>Нода 1 (master):&lt;/strong>&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>vrrp_instance VI_1 {
+state MASTER
+interface eth0
+virtual_router_id 101
+priority 255
+advert_int 1
+authentication {
+auth_type PASS
+auth_pass secret12
+}
+virtual_ipaddress {
+192.168.1.100/24
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>&lt;strong>Нода 2 (backup):&lt;/strong>&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>vrrp_instance VI_1 {
+state BACKUP
+interface eth0
+virtual_router_id 101
+priority 150
+advert_int 1
+authentication {
+auth_type PASS
+auth_pass secret12
+}
+virtual_ipaddress {
+192.168.1.100/24
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Критичные параметры:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>virtual_router_id&lt;/code> - должен совпадать на обеих нодах, уникален в сегменте (1-255)&lt;/li>
+&lt;li>&lt;code>auth_pass&lt;/code> - максимум 8 символов&lt;/li>
+&lt;li>&lt;code>priority&lt;/code> - у master выше чем у backup&lt;/li>
+&lt;/ul>
+&lt;h3>Failover без preemption&lt;span class="hx:absolute hx:-mt-20" id="failover-без-preemption">&lt;/span>
+&lt;a href="#failover-%d0%b1%d0%b5%d0%b7-preemption" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>Оба сервера стартуют как BACKUP. Кто первый поднялся - тот master. При восстановлении упавшего - он остается backup.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>vrrp_instance VI_1 {
+state BACKUP
+nopreempt
+interface eth0
+virtual_router_id 101
+priority 200
+advert_int 1
+virtual_ipaddress {
+192.168.1.100/24
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h3>Health check через track_script&lt;span class="hx:absolute hx:-mt-20" id="health-check-через-track_script">&lt;/span>
+&lt;a href="#health-check-%d1%87%d0%b5%d1%80%d0%b5%d0%b7-track_script" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>Отслеживание сервиса. При падении сервиса - снижается priority и VIP уходит на backup.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>vrrp_script chk_nginx {
+script &amp;#34;/usr/bin/pgrep nginx&amp;#34;
+interval 2
+weight -50
+fall 3
+rise 2
+}
+vrrp_instance VI_1 {
+state MASTER
+interface eth0
+virtual_router_id 101
+priority 100
+track_script {
+chk_nginx
+}
+virtual_ipaddress {
+192.168.1.100/24
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Параметры vrrp_script:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>interval&lt;/code> - частота проверки в секундах (по умолчанию 1)&lt;/li>
+&lt;li>&lt;code>weight&lt;/code> - изменение priority при fail (отрицательное значение)&lt;/li>
+&lt;li>&lt;code>fall&lt;/code> - сколько раз должен упасть для перехода в FAULT&lt;/li>
+&lt;li>&lt;code>rise&lt;/code> - сколько раз должен отработать для выхода из FAULT&lt;/li>
+&lt;/ul>
+&lt;h3>Track interface&lt;span class="hx:absolute hx:-mt-20" id="track-interface">&lt;/span>
+&lt;a href="#track-interface" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>Падение интерфейса -&amp;gt; переход в FAULT -&amp;gt; VIP уходит на backup.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>vrrp_instance VI_1 {
+state MASTER
+interface eth0
+virtual_router_id 101
+priority 100
+track_interface {
+eth1
+eth2 weight -50
+}
+virtual_ipaddress {
+192.168.1.100/24
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h3>Track process&lt;span class="hx:absolute hx:-mt-20" id="track-process">&lt;/span>
+&lt;a href="#track-process" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>vrrp_track_process track_haproxy {
+process haproxy
+delay 1
+}
+vrrp_instance VI_1 {
+state BACKUP
+nopreempt
+interface eth0
+virtual_router_id 101
+priority 200
+track_process {
+track_haproxy
+}
+virtual_ipaddress {
+192.168.1.100/24
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Команды&lt;span class="hx:absolute hx:-mt-20" id="команды">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">apt install keepalived&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Установка (Debian/Ubuntu).&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">systemctl &lt;span class="nb">enable&lt;/span> keepalived
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">systemctl start keepalived&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Запуск сервиса.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">systemctl status keepalived
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">journalctl -u keepalived -f&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Статус и логи.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ip addr show eth0&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Проверить наличие VIP на интерфейсе.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tcpdump -i eth0 -n proto &lt;span class="m">112&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Захват VRRP advertisements.&lt;/p>
+&lt;h2>Firewall&lt;span class="hx:absolute hx:-mt-20" id="firewall">&lt;/span>
+&lt;a href="#firewall" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>VRRP использует IP protocol 112. Без правил firewall advertisements не пройдут.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># iptables&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">iptables -A INPUT -p &lt;span class="m">112&lt;/span> -j ACCEPT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># firewalld&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --add-protocol&lt;span class="o">=&lt;/span>vrrp --permanent
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --reload
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># nftables&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">nft add rule inet filter input ip protocol &lt;span class="m">112&lt;/span> accept&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Примеры&lt;span class="hx:absolute hx:-mt-20" id="примеры">&lt;/span>
+&lt;a href="#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d1%80%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;h3>HA для nginx&lt;span class="hx:absolute hx:-mt-20" id="ha-для-nginx">&lt;/span>
+&lt;a href="#ha-%d0%b4%d0%bb%d1%8f-nginx" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>Две ноды. VIP 10.0.0.100. При падении nginx на master - VIP переезжает на backup.&lt;/p>
+&lt;p>&lt;strong>Обе ноды:&lt;/strong>&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>global_defs {
+router_id nginx_ha
+}
+vrrp_script chk_nginx {
+script &amp;#34;/usr/bin/pgrep nginx&amp;#34;
+interval 2
+weight -50
+fall 2
+rise 2
+}
+vrrp_instance VI_NGINX {
+state BACKUP
+nopreempt
+interface eth0
+virtual_router_id 51
+priority 100
+advert_int 1
+track_script {
+chk_nginx
+}
+virtual_ipaddress {
+10.0.0.100/24
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Разница между нодами - можно задать разный &lt;code>priority&lt;/code> (100 vs 90).&lt;/p>
+&lt;h3>LVS балансировка&lt;span class="hx:absolute hx:-mt-20" id="lvs-балансировка">&lt;/span>
+&lt;a href="#lvs-%d0%b1%d0%b0%d0%bb%d0%b0%d0%bd%d1%81%d0%b8%d1%80%d0%be%d0%b2%d0%ba%d0%b0" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h3>&lt;p>Keepalived как балансировщик на основе IPVS.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>virtual_server 192.168.1.100 80 {
+delay_loop 6
+lvs_sched rr
+lvs_method NAT
+protocol TCP
+real_server 192.168.1.10 80 {
+weight 1
+TCP_CHECK {
+connect_timeout 10
+}
+}
+real_server 192.168.1.11 80 {
+weight 1
+TCP_CHECK {
+connect_timeout 10
+}
+}
+}&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Schedulers (&lt;code>lvs_sched&lt;/code>):&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>rr&lt;/code> - round robin&lt;/li>
+&lt;li>&lt;code>wrr&lt;/code> - weighted round robin&lt;/li>
+&lt;li>&lt;code>lc&lt;/code> - least connections&lt;/li>
+&lt;li>&lt;code>wlc&lt;/code> - weighted least connections&lt;/li>
+&lt;li>&lt;code>sh&lt;/code> - source hash&lt;/li>
+&lt;/ul>
+&lt;p>Methods (&lt;code>lvs_method&lt;/code>):&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>NAT&lt;/code> - destination NAT&lt;/li>
+&lt;li>&lt;code>DR&lt;/code> - direct routing (real servers отвечают напрямую)&lt;/li>
+&lt;li>&lt;code>TUN&lt;/code> - IP tunneling&lt;/li>
+&lt;/ul>
+&lt;h2>Проверка&lt;span class="hx:absolute hx:-mt-20" id="проверка">&lt;/span>
+&lt;a href="#%d0%bf%d1%80%d0%be%d0%b2%d0%b5%d1%80%d0%ba%d0%b0" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ol>
+&lt;li>Запустить keepalived на обеих нодах&lt;/li>
+&lt;li>&lt;code>ip addr show&lt;/code> - VIP должен быть на master&lt;/li>
+&lt;li>Остановить keepalived на master: &lt;code>systemctl stop keepalived&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip addr show&lt;/code> на backup - VIP должен появиться&lt;/li>
+&lt;li>&lt;code>tcpdump -i eth0 proto 112&lt;/code> - должны идти VRRP пакеты&lt;/li>
+&lt;/ol>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/ipvs/">IPVS&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

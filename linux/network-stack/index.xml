@@ -7,7 +7,7 @@
 &lt;p>На практике разница не критична для большинства задач.&lt;/p>
 &lt;h2>kqueue vs epoll&lt;span class="hx:absolute hx:-mt-20" id="kqueue-vs-epoll">&lt;/span>
 &lt;a href="#kqueue-vs-epoll" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>epoll раздражает тем, что на каждое изменение fd нужен отдельный epoll_ctl(). 100 сокетов поменялось - 100 syscalls.&lt;/p>
-&lt;p>kqueue делает всё через один kevent() - и регистрация, и получение событий. Меньше syscalls = меньше overhead.&lt;/p>
+&lt;p>kqueue делает все через один kevent() - и регистрация, и получение событий. Меньше syscalls = меньше overhead.&lt;/p>
 &lt;p>Еще kqueue нормально работает с disk I/O через EVFILT_AIO. В Linux epoll на файлах бесполезен - файл &amp;ldquo;всегда ready&amp;rdquo;, а реально блокируется на чтении с диска.&lt;/p>
 &lt;p>Источник: &lt;a href="https://thamizhelango.medium.com/freebsd-kqueue-vs-linux-epoll-why-kqueue-often-outperforms-and-its-impact-on-network-1ae39afb6e16"target="_blank" rel="noopener">kqueue vs epoll&lt;/a>&lt;/p>
 &lt;h2>sendfile - вот где разница&lt;span class="hx:absolute hx:-mt-20" id="sendfile---вот-где-разница">&lt;/span>

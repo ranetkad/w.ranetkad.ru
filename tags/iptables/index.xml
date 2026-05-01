@@ -1,0 +1,46 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Iptables</title><link>https://w.ranetkad.ru/tags/iptables/</link><description>Recent content in Iptables on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/iptables/index.xml" rel="self" type="application/rss+xml"/><item><title>netfilter</title><link>https://w.ranetkad.ru/linux/netfilter/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/linux/netfilter/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Подсистема ядра для фильтрации, NAT и conntrack. Hook-points PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING. Поверх hooks работают iptables, nftables и eBPF.&lt;/p>
+&lt;h2>Hook order&lt;span class="hx:absolute hx:-mt-20" id="hook-order">&lt;/span>
+&lt;a href="#hook-order" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>ingress -&amp;gt; PREROUTING -&amp;gt; [routing] -&amp;gt; INPUT -&amp;gt; local
+-&amp;gt; FORWARD -&amp;gt; POSTROUTING -&amp;gt; egress
+local -&amp;gt; OUTPUT -&amp;gt; [routing] -&amp;gt; POSTROUTING -&amp;gt; egress&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>iptables vs nftables&lt;span class="hx:absolute hx:-mt-20" id="iptables-vs-nftables">&lt;/span>
+&lt;a href="#iptables-vs-nftables" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Аспект | iptables | nftables |
+| backend | x_tables | nf_tables |
+| таблицы | filter, nat, mangle, raw, security | произвольные, named |
+| family | один на v4 (ip6tables на v6) | inet, ip, ip6, arp, bridge, netdev |
+| atomic update | нет, правило за правилом | да, через transactions |
+| sets/maps | ipset (внешний) | встроены |
+| статус | legacy с RHEL 9 / kernel 5.x | default везде |&lt;/p>
+&lt;h2>conntrack&lt;span class="hx:absolute hx:-mt-20" id="conntrack">&lt;/span>
+&lt;a href="#conntrack" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;code>/proc/net/nf_conntrack&lt;/code> - state table.&lt;/p>
+&lt;p>States. NEW, ESTABLISHED, RELATED, INVALID, UNTRACKED.&lt;/p>
+&lt;p>| sysctl | Что |
+| &lt;code>net.netfilter.nf_conntrack_max&lt;/code> | размер таблицы |
+| &lt;code>net.netfilter.nf_conntrack_tcp_timeout_established&lt;/code> | дефолт 5 дней |
+| &lt;code>net.netfilter.nf_conntrack_buckets&lt;/code> | bucket count для hashtable |&lt;/p>
+&lt;h2>NAT&lt;span class="hx:absolute hx:-mt-20" id="nat">&lt;/span>
+&lt;a href="#nat" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>SNAT/DNAT в PREROUTING/POSTROUTING&lt;/li>
+&lt;li>conntrack хранит NAT mapping&lt;/li>
+&lt;li>masquerade - SNAT на адрес исходящего интерфейса&lt;/li>
+&lt;/ul>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/ipvs/">IPVS&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/network-stack/">Network stack&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/tools/">Network tools&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

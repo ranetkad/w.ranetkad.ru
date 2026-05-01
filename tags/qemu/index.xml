@@ -1,0 +1,61 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Qemu</title><link>https://w.ranetkad.ru/tags/qemu/</link><description>Recent content in Qemu on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/qemu/index.xml" rel="self" type="application/rss+xml"/><item><title>KVM</title><link>https://w.ranetkad.ru/linux/kvm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/linux/kvm/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Гипервизор в Linux kernel. CPU через Intel VT-x / AMD-V, память через EPT/NPT.&lt;/p>
+&lt;p>QEMU делает device emulation и IO в userspace, KVM - CPU и memory в kernel.&lt;/p>
+&lt;p>libvirt - management layer поверх QEMU/KVM с единым API.&lt;/p>
+&lt;h2>Стек&lt;span class="hx:absolute hx:-mt-20" id="стек">&lt;/span>
+&lt;a href="#%d1%81%d1%82%d0%b5%d0%ba" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>guest VM
+|
+QEMU (vCPU threads, devices)
+|
+/dev/kvm (ioctl) -&amp;gt; KVM module in kernel
+|
+hardware (VT-x/AMD-V, EPT/NPT, IOMMU)&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
+&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Термин | Что |
+| domain | виртуальная машина в терминах libvirt |
+| vCPU | поток QEMU привязанный к KVM_RUN ioctl |
+| virtio | paravirtual device interface (net, block, scsi, fs) |
+| vhost | offload virtio в kernel (vhost-net, vhost-scsi) |
+| vfio | passthrough host PCI device в гостя |
+| SR-IOV | hardware partitioning одной NIC на VF |&lt;/p>
+&lt;h2>virsh&lt;span class="hx:absolute hx:-mt-20" id="virsh">&lt;/span>
+&lt;a href="#virsh" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;pre>&lt;code>virsh list --all
+virsh dominfo &amp;lt;domain&amp;gt;
+virsh dumpxml &amp;lt;domain&amp;gt;
+virsh start/shutdown/destroy &amp;lt;domain&amp;gt;
+virsh attach-device / detach-device
+virsh console &amp;lt;domain&amp;gt;&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Скопировать код"
+aria-label="Скопировать код"
+data-copied-label="Скопировано!"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>XML domain&lt;span class="hx:absolute hx:-mt-20" id="xml-domain">&lt;/span>
+&lt;a href="#xml-domain" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;code>/etc/libvirt/qemu/&amp;lt;domain&amp;gt;.xml&lt;/code> - persistent definition.&lt;/p>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/namespaces/">Namespaces&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/numa/">NUMA&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/ovs/">OVS&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/dpdk/">DPDK&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

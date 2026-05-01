@@ -1,0 +1,32 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ranetkad – Tls</title><link>https://w.ranetkad.ru/tags/tls/</link><description>Recent content in Tls on ranetkad</description><generator>Hugo -- gohugo.io</generator><language>ru</language><atom:link href="https://w.ranetkad.ru/tags/tls/index.xml" rel="self" type="application/rss+xml"/><item><title>TLS</title><link>https://w.ranetkad.ru/networking/tls/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/networking/tls/</guid><description>
+&lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
+&lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Transport Layer Security - шифрование соединения между клиентом и сервером.
+Работает над TCP (Application Layer). Для UDP - DTLS.
+Наблюдатель видит только IP, порты, тип шифрования. Данные недоступны.&lt;/p>
+&lt;h2>Handshake&lt;span class="hx:absolute hx:-mt-20" id="handshake">&lt;/span>
+&lt;a href="#handshake" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Установление защищенного соединения:&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>ClientHello&lt;/strong> - клиент отправляет версию TLS, поддерживаемые шифры, случайные данные&lt;/li>
+&lt;li>&lt;strong>ServerHello&lt;/strong> - сервер выбирает шифр, отправляет сертификат&lt;/li>
+&lt;li>&lt;strong>Key Exchange&lt;/strong> - обмен ключами (обычно ECDHE)&lt;/li>
+&lt;li>&lt;strong>Finished&lt;/strong> - обе стороны подтверждают, начинается шифрованный обмен&lt;/li>
+&lt;/ol>
+&lt;p>TLS 1.3: 1-RTT (один round-trip). TLS 1.2: 2-RTT.&lt;/p>
+&lt;h2>Session Ticket&lt;span class="hx:absolute hx:-mt-20" id="session-ticket">&lt;/span>
+&lt;a href="#session-ticket" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Оптимизация для повторных соединений.&lt;/p>
+&lt;ul>
+&lt;li>Сервер шифрует параметры сессии своим ключом и отправляет клиенту&lt;/li>
+&lt;li>Клиент при reconnect отправляет ticket в ClientHello&lt;/li>
+&lt;li>Сервер расшифровывает - сессия восстановлена без полного handshake&lt;/li>
+&lt;li>Сервер не хранит состояние сессий&lt;/li>
+&lt;/ul>
+&lt;h2>False Start&lt;span class="hx:absolute hx:-mt-20" id="false-start">&lt;/span>
+&lt;a href="#false-start" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Оптимизация: клиент начинает отправлять данные до завершения handshake.
+Работает только если выбран шифр с forward secrecy.&lt;/p>
+&lt;h2>TLS 1.3 vs 1.2&lt;span class="hx:absolute hx:-mt-20" id="tls-13-vs-12">&lt;/span>
+&lt;a href="#tls-13-vs-12" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>1.3: убраны устаревшие шифры (RSA key exchange, CBC, SHA-1)&lt;/li>
+&lt;li>1.3: обязательный forward secrecy (ECDHE)&lt;/li>
+&lt;li>1.3: 0-RTT resumption (с рисками replay)&lt;/li>
+&lt;li>1.3: зашифрован handshake после ServerHello&lt;/li>
+&lt;/ul></description></item></channel></rss>

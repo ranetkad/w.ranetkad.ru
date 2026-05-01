@@ -594,7 +594,13 @@ data-copied-label="Скопировано!"
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
 &lt;/button>
 &lt;/div>
-&lt;/div></description></item><item><title>Глоссарий</title><link>https://w.ranetkad.ru/infrastructure/kubernetes/glossary/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/infrastructure/kubernetes/glossary/</guid><description>
+&lt;/div>
+&lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
+&lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/namespaces/">Namespaces&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/linux/network-stack/">Network stack&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://w.ranetkad.ru/networking/ovn/">OVN&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Глоссарий</title><link>https://w.ranetkad.ru/infrastructure/kubernetes/glossary/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://w.ranetkad.ru/infrastructure/kubernetes/glossary/</guid><description>
 &lt;h2>Коротко&lt;span class="hx:absolute hx:-mt-20" id="коротко">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>Основные термины Kubernetes. Что есть что.&lt;/p>
 &lt;h2>Workloads&lt;span class="hx:absolute hx:-mt-20" id="workloads">&lt;/span>
