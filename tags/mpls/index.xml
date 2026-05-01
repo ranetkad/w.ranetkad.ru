@@ -3,23 +3,91 @@
 &lt;a href="#%d0%ba%d0%be%d1%80%d0%be%d1%82%d0%ba%d0%be" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>RFC 3031. Label stack между L2 и L3. Forwarding по LFIB, а не по IP.&lt;/p>
 &lt;p>Label 20 бит, EXP 3 бит (QoS), S 1 бит (bottom-of-stack), TTL 8 бит.&lt;/p>
 &lt;h2>Сигналинг меток&lt;span class="hx:absolute hx:-mt-20" id="сигналинг-меток">&lt;/span>
-&lt;a href="#%d1%81%d0%b8%d0%b3%d0%bd%d0%b0%d0%bb%d0%b8%d0%bd%d0%b3-%d0%bc%d0%b5%d1%82%d0%be%d0%ba" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Протокол | Что делает |
-| LDP | hop-by-hop signaling, простой, RFC 5036 |
-| RSVP-TE | TE-туннели с резервированием, RFC 3209 |
-| BGP-LU | labeled unicast, RFC 8277, для inter-AS L3VPN и SR-MPLS |
-| Segment Routing | source routing через стек меток (SR-MPLS, RFC 8660) |&lt;/p>
+&lt;a href="#%d1%81%d0%b8%d0%b3%d0%bd%d0%b0%d0%bb%d0%b8%d0%bd%d0%b3-%d0%bc%d0%b5%d1%82%d0%be%d0%ba" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Протокол&lt;/th>
+&lt;th>Что делает&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>LDP&lt;/td>
+&lt;td>hop-by-hop signaling, простой, RFC 5036&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>RSVP-TE&lt;/td>
+&lt;td>TE-туннели с резервированием, RFC 3209&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>BGP-LU&lt;/td>
+&lt;td>labeled unicast, RFC 8277, для inter-AS L3VPN и SR-MPLS&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Segment Routing&lt;/td>
+&lt;td>source routing через стек меток (SR-MPLS, RFC 8660)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Reserved labels&lt;span class="hx:absolute hx:-mt-20" id="reserved-labels">&lt;/span>
-&lt;a href="#reserved-labels" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Label | Имя | Смысл |
-| 0 | Explicit NULL IPv4 | PHP off, get IPv4 |
-| 1 | Router Alert | |
-| 2 | Explicit NULL IPv6 | |
-| 3 | Implicit NULL | PHP, label pop на penultimate hop |&lt;/p>
+&lt;a href="#reserved-labels" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Label&lt;/th>
+&lt;th>Имя&lt;/th>
+&lt;th>Смысл&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>0&lt;/td>
+&lt;td>Explicit NULL IPv4&lt;/td>
+&lt;td>PHP off, get IPv4&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>1&lt;/td>
+&lt;td>Router Alert&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>2&lt;/td>
+&lt;td>Explicit NULL IPv6&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>3&lt;/td>
+&lt;td>Implicit NULL&lt;/td>
+&lt;td>PHP, label pop на penultimate hop&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Применения&lt;span class="hx:absolute hx:-mt-20" id="применения">&lt;/span>
-&lt;a href="#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Применение | Что |
-| L3VPN | VPNv4/VPNv6 с PE-CE, RFC 4364 |
-| L2VPN | VPLS и EVPN over MPLS |
-| TE | explicit paths, FRR |
-| SR-MPLS | segment routing на стеке меток |&lt;/p>
+&lt;a href="#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Применение&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>L3VPN&lt;/td>
+&lt;td>VPNv4/VPNv6 с PE-CE, RFC 4364&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>L2VPN&lt;/td>
+&lt;td>VPLS и EVPN over MPLS&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>TE&lt;/td>
+&lt;td>explicit paths, FRR&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>SR-MPLS&lt;/td>
+&lt;td>segment routing на стеке меток&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
 &lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
 &lt;li>&lt;a href="https://w.ranetkad.ru/networking/bgp/">BGP&lt;/a>&lt;/li>

@@ -24,13 +24,40 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
-&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Термин | Что |
-| domain | виртуальная машина в терминах libvirt |
-| vCPU | поток QEMU привязанный к KVM_RUN ioctl |
-| virtio | paravirtual device interface (net, block, scsi, fs) |
-| vhost | offload virtio в kernel (vhost-net, vhost-scsi) |
-| vfio | passthrough host PCI device в гостя |
-| SR-IOV | hardware partitioning одной NIC на VF |&lt;/p>
+&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Термин&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>domain&lt;/td>
+&lt;td>виртуальная машина в терминах libvirt&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>vCPU&lt;/td>
+&lt;td>поток QEMU привязанный к KVM_RUN ioctl&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>virtio&lt;/td>
+&lt;td>paravirtual device interface (net, block, scsi, fs)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>vhost&lt;/td>
+&lt;td>offload virtio в kernel (vhost-net, vhost-scsi)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>vfio&lt;/td>
+&lt;td>passthrough host PCI device в гостя&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>SR-IOV&lt;/td>
+&lt;td>hardware partitioning одной NIC на VF&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>virsh&lt;span class="hx:absolute hx:-mt-20" id="virsh">&lt;/span>
 &lt;a href="#virsh" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
 &lt;div>&lt;pre>&lt;code>virsh list --all

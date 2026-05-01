@@ -15,7 +15,9 @@
 | Acknowledgment Number |
 &amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
 | Data | |U|A|P|R|S|F| |
+|---|---|---|---|---|---|---|---|---|
 | Offset| Reserved |R|C|S|S|Y|I| Window |
+|---|---|---|---|---|---|---|---|---|
 | | |G|K|H|T|N|N| |
 &amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;-&amp;#43;
 | Checksum | Urgent Pointer |

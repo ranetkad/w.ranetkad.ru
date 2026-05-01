@@ -22,13 +22,40 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
-&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Термин | Что |
-| Logical Switch | виртуальный L2 segment, multi-host |
-| Logical Router | distributed router, logical |
-| Chassis | hypervisor с ovn-controller |
-| Port Binding | привязка logical port к chassis |
-| Localnet | L2 attachment к физической сети через bridge mapping |
-| Geneve | default tunnel encapsulation между chassis |&lt;/p>
+&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Термин&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Logical Switch&lt;/td>
+&lt;td>виртуальный L2 segment, multi-host&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Logical Router&lt;/td>
+&lt;td>distributed router, logical&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Chassis&lt;/td>
+&lt;td>hypervisor с ovn-controller&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Port Binding&lt;/td>
+&lt;td>привязка logical port к chassis&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Localnet&lt;/td>
+&lt;td>L2 attachment к физической сети через bridge mapping&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Geneve&lt;/td>
+&lt;td>default tunnel encapsulation между chassis&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Команды&lt;span class="hx:absolute hx:-mt-20" id="команды">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
 &lt;div>&lt;pre>&lt;code>ovn-nbctl ls-list / ls-add / ls-del

@@ -26,19 +26,25 @@
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
 &lt;div>&lt;pre>&lt;code>&amp;#43;------------------------------------------&amp;#43;
 | MANO |
+|---|
 | &amp;#43;--------&amp;#43; &amp;#43;--------&amp;#43; &amp;#43;--------&amp;#43; |
+|---|
 | | NFVO | | VNFM | | VIM | |
+|---|---|---|---|---|---|---|
 | &amp;#43;--------&amp;#43; &amp;#43;--------&amp;#43; &amp;#43;--------&amp;#43; |
 &amp;#43;------------------------------------------&amp;#43;
 |
 &amp;#43;------------------------------------------&amp;#43;
 | VNF Layer |
+|---|
 | [vRouter] [vFirewall] [vLB] [vNAT] |
 &amp;#43;------------------------------------------&amp;#43;
 |
 &amp;#43;------------------------------------------&amp;#43;
 | NFVI |
+|---|
 | Hypervisor / Container Runtime |
+|---|
 | Compute | Storage | Network |
 &amp;#43;------------------------------------------&amp;#43;&lt;/code>&lt;/pre>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
 &lt;button

@@ -5,27 +5,102 @@
 &lt;h2>Address family&lt;span class="hx:absolute hx:-mt-20" id="address-family">&lt;/span>
 &lt;a href="#address-family" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>AFI 25 (L2VPN), SAFI 70 (EVPN).&lt;/p>
 &lt;h2>Route types&lt;span class="hx:absolute hx:-mt-20" id="route-types">&lt;/span>
-&lt;a href="#route-types" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Type | Назначение |
-| 1 | Ethernet Auto-Discovery, multi-homing |
-| 2 | MAC/IP Advertisement |
-| 3 | Inclusive Multicast Ethernet Tag (BUM, replication list) |
-| 4 | Ethernet Segment, multi-homing DF election |
-| 5 | IP Prefix Route (L3VPN-like) |&lt;/p>
+&lt;a href="#route-types" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Type&lt;/th>
+&lt;th>Назначение&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>1&lt;/td>
+&lt;td>Ethernet Auto-Discovery, multi-homing&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>2&lt;/td>
+&lt;td>MAC/IP Advertisement&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>3&lt;/td>
+&lt;td>Inclusive Multicast Ethernet Tag (BUM, replication list)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>4&lt;/td>
+&lt;td>Ethernet Segment, multi-homing DF election&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>5&lt;/td>
+&lt;td>IP Prefix Route (L3VPN-like)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
-&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Термин | Что это |
-| RD | Route Distinguisher, делает префикс уникальным в BGP |
-| RT | Route Target, политика import/export между VRF/EVI |
-| EVI | EVPN Instance |
-| ESI | Ethernet Segment Identifier |
-| VTEP | VXLAN Tunnel Endpoint |
-| VNI | VXLAN Network Identifier (24 бит) |&lt;/p>
+&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Термин&lt;/th>
+&lt;th>Что это&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>RD&lt;/td>
+&lt;td>Route Distinguisher, делает префикс уникальным в BGP&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>RT&lt;/td>
+&lt;td>Route Target, политика import/export между VRF/EVI&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>EVI&lt;/td>
+&lt;td>EVPN Instance&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>ESI&lt;/td>
+&lt;td>Ethernet Segment Identifier&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>VTEP&lt;/td>
+&lt;td>VXLAN Tunnel Endpoint&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>VNI&lt;/td>
+&lt;td>VXLAN Network Identifier (24 бит)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Сценарии&lt;span class="hx:absolute hx:-mt-20" id="сценарии">&lt;/span>
-&lt;a href="#%d1%81%d1%86%d0%b5%d0%bd%d0%b0%d1%80%d0%b8%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Сценарий | Что |
-| L2VNI | bridging одного broadcast domain через fabric |
-| L3VNI | routing между VRF поверх fabric |
-| Symmetric IRB | route-and-bridge симметричный, маршрутизация на ingress и egress VTEP |
-| Asymmetric IRB | route-only-on-ingress, на egress только bridging |
-| Multi-homing all-active | через Type-1 и Type-4, без блокировки линков как в STP |&lt;/p>
+&lt;a href="#%d1%81%d1%86%d0%b5%d0%bd%d0%b0%d1%80%d0%b8%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Сценарий&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>L2VNI&lt;/td>
+&lt;td>bridging одного broadcast domain через fabric&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>L3VNI&lt;/td>
+&lt;td>routing между VRF поверх fabric&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Symmetric IRB&lt;/td>
+&lt;td>route-and-bridge симметричный, маршрутизация на ingress и egress VTEP&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Asymmetric IRB&lt;/td>
+&lt;td>route-only-on-ingress, на egress только bridging&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Multi-homing all-active&lt;/td>
+&lt;td>через Type-1 и Type-4, без блокировки линков как в STP&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
 &lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
 &lt;li>&lt;a href="https://w.ranetkad.ru/networking/bgp/">BGP&lt;/a>&lt;/li>

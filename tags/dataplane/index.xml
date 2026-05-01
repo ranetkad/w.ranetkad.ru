@@ -5,27 +5,102 @@
 &lt;h2>Address family&lt;span class="hx:absolute hx:-mt-20" id="address-family">&lt;/span>
 &lt;a href="#address-family" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>AFI 25 (L2VPN), SAFI 70 (EVPN).&lt;/p>
 &lt;h2>Route types&lt;span class="hx:absolute hx:-mt-20" id="route-types">&lt;/span>
-&lt;a href="#route-types" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Type | Назначение |
-| 1 | Ethernet Auto-Discovery, multi-homing |
-| 2 | MAC/IP Advertisement |
-| 3 | Inclusive Multicast Ethernet Tag (BUM, replication list) |
-| 4 | Ethernet Segment, multi-homing DF election |
-| 5 | IP Prefix Route (L3VPN-like) |&lt;/p>
+&lt;a href="#route-types" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Type&lt;/th>
+&lt;th>Назначение&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>1&lt;/td>
+&lt;td>Ethernet Auto-Discovery, multi-homing&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>2&lt;/td>
+&lt;td>MAC/IP Advertisement&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>3&lt;/td>
+&lt;td>Inclusive Multicast Ethernet Tag (BUM, replication list)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>4&lt;/td>
+&lt;td>Ethernet Segment, multi-homing DF election&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>5&lt;/td>
+&lt;td>IP Prefix Route (L3VPN-like)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
-&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Термин | Что это |
-| RD | Route Distinguisher, делает префикс уникальным в BGP |
-| RT | Route Target, политика import/export между VRF/EVI |
-| EVI | EVPN Instance |
-| ESI | Ethernet Segment Identifier |
-| VTEP | VXLAN Tunnel Endpoint |
-| VNI | VXLAN Network Identifier (24 бит) |&lt;/p>
+&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Термин&lt;/th>
+&lt;th>Что это&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>RD&lt;/td>
+&lt;td>Route Distinguisher, делает префикс уникальным в BGP&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>RT&lt;/td>
+&lt;td>Route Target, политика import/export между VRF/EVI&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>EVI&lt;/td>
+&lt;td>EVPN Instance&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>ESI&lt;/td>
+&lt;td>Ethernet Segment Identifier&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>VTEP&lt;/td>
+&lt;td>VXLAN Tunnel Endpoint&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>VNI&lt;/td>
+&lt;td>VXLAN Network Identifier (24 бит)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Сценарии&lt;span class="hx:absolute hx:-mt-20" id="сценарии">&lt;/span>
-&lt;a href="#%d1%81%d1%86%d0%b5%d0%bd%d0%b0%d1%80%d0%b8%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Сценарий | Что |
-| L2VNI | bridging одного broadcast domain через fabric |
-| L3VNI | routing между VRF поверх fabric |
-| Symmetric IRB | route-and-bridge симметричный, маршрутизация на ingress и egress VTEP |
-| Asymmetric IRB | route-only-on-ingress, на egress только bridging |
-| Multi-homing all-active | через Type-1 и Type-4, без блокировки линков как в STP |&lt;/p>
+&lt;a href="#%d1%81%d1%86%d0%b5%d0%bd%d0%b0%d1%80%d0%b8%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Сценарий&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>L2VNI&lt;/td>
+&lt;td>bridging одного broadcast domain через fabric&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>L3VNI&lt;/td>
+&lt;td>routing между VRF поверх fabric&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Symmetric IRB&lt;/td>
+&lt;td>route-and-bridge симметричный, маршрутизация на ingress и egress VTEP&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Asymmetric IRB&lt;/td>
+&lt;td>route-only-on-ingress, на egress только bridging&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Multi-homing all-active&lt;/td>
+&lt;td>через Type-1 и Type-4, без блокировки линков как в STP&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>See also&lt;span class="hx:absolute hx:-mt-20" id="see-also">&lt;/span>
 &lt;a href="#see-also" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
 &lt;li>&lt;a href="https://w.ranetkad.ru/networking/bgp/">BGP&lt;/a>&lt;/li>
@@ -542,13 +617,40 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;h2>Базовые сущности&lt;span class="hx:absolute hx:-mt-20" id="базовые-сущности">&lt;/span>
-&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Термин | Что |
-| Logical Switch | виртуальный L2 segment, multi-host |
-| Logical Router | distributed router, logical |
-| Chassis | hypervisor с ovn-controller |
-| Port Binding | привязка logical port к chassis |
-| Localnet | L2 attachment к физической сети через bridge mapping |
-| Geneve | default tunnel encapsulation между chassis |&lt;/p>
+&lt;a href="#%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%83%d1%89%d0%bd%d0%be%d1%81%d1%82%d0%b8" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Термин&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Logical Switch&lt;/td>
+&lt;td>виртуальный L2 segment, multi-host&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Logical Router&lt;/td>
+&lt;td>distributed router, logical&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Chassis&lt;/td>
+&lt;td>hypervisor с ovn-controller&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Port Binding&lt;/td>
+&lt;td>привязка logical port к chassis&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Localnet&lt;/td>
+&lt;td>L2 attachment к физической сети через bridge mapping&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Geneve&lt;/td>
+&lt;td>default tunnel encapsulation между chassis&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>Команды&lt;span class="hx:absolute hx:-mt-20" id="команды">&lt;/span>
 &lt;a href="#%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d1%8b" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
 &lt;div>&lt;pre>&lt;code>ovn-nbctl ls-list / ls-add / ls-del
@@ -598,20 +700,72 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;h2>iptables vs nftables&lt;span class="hx:absolute hx:-mt-20" id="iptables-vs-nftables">&lt;/span>
-&lt;a href="#iptables-vs-nftables" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Аспект | iptables | nftables |
-| backend | x_tables | nf_tables |
-| таблицы | filter, nat, mangle, raw, security | произвольные, named |
-| family | один на v4 (ip6tables на v6) | inet, ip, ip6, arp, bridge, netdev |
-| atomic update | нет, правило за правилом | да, через transactions |
-| sets/maps | ipset (внешний) | встроены |
-| статус | legacy с RHEL 9 / kernel 5.x | default везде |&lt;/p>
+&lt;a href="#iptables-vs-nftables" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Аспект&lt;/th>
+&lt;th>iptables&lt;/th>
+&lt;th>nftables&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>backend&lt;/td>
+&lt;td>x_tables&lt;/td>
+&lt;td>nf_tables&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>таблицы&lt;/td>
+&lt;td>filter, nat, mangle, raw, security&lt;/td>
+&lt;td>произвольные, named&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>family&lt;/td>
+&lt;td>один на v4 (ip6tables на v6)&lt;/td>
+&lt;td>inet, ip, ip6, arp, bridge, netdev&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>atomic update&lt;/td>
+&lt;td>нет, правило за правилом&lt;/td>
+&lt;td>да, через transactions&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>sets/maps&lt;/td>
+&lt;td>ipset (внешний)&lt;/td>
+&lt;td>встроены&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>статус&lt;/td>
+&lt;td>legacy с RHEL 9 / kernel 5.x&lt;/td>
+&lt;td>default везде&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>conntrack&lt;span class="hx:absolute hx:-mt-20" id="conntrack">&lt;/span>
 &lt;a href="#conntrack" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;code>/proc/net/nf_conntrack&lt;/code> - state table.&lt;/p>
 &lt;p>States. NEW, ESTABLISHED, RELATED, INVALID, UNTRACKED.&lt;/p>
-&lt;p>| sysctl | Что |
-| &lt;code>net.netfilter.nf_conntrack_max&lt;/code> | размер таблицы |
-| &lt;code>net.netfilter.nf_conntrack_tcp_timeout_established&lt;/code> | дефолт 5 дней |
-| &lt;code>net.netfilter.nf_conntrack_buckets&lt;/code> | bucket count для hashtable |&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>sysctl&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>net.netfilter.nf_conntrack_max&lt;/code>&lt;/td>
+&lt;td>размер таблицы&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>net.netfilter.nf_conntrack_tcp_timeout_established&lt;/code>&lt;/td>
+&lt;td>дефолт 5 дней&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>net.netfilter.nf_conntrack_buckets&lt;/code>&lt;/td>
+&lt;td>bucket count для hashtable&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>NAT&lt;span class="hx:absolute hx:-mt-20" id="nat">&lt;/span>
 &lt;a href="#nat" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
 &lt;li>SNAT/DNAT в PREROUTING/POSTROUTING&lt;/li>

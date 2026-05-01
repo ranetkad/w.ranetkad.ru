@@ -18,20 +18,72 @@ data-copied-label="Скопировано!"
 &lt;/div>
 &lt;/div>
 &lt;h2>iptables vs nftables&lt;span class="hx:absolute hx:-mt-20" id="iptables-vs-nftables">&lt;/span>
-&lt;a href="#iptables-vs-nftables" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>| Аспект | iptables | nftables |
-| backend | x_tables | nf_tables |
-| таблицы | filter, nat, mangle, raw, security | произвольные, named |
-| family | один на v4 (ip6tables на v6) | inet, ip, ip6, arp, bridge, netdev |
-| atomic update | нет, правило за правилом | да, через transactions |
-| sets/maps | ipset (внешний) | встроены |
-| статус | legacy с RHEL 9 / kernel 5.x | default везде |&lt;/p>
+&lt;a href="#iptables-vs-nftables" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Аспект&lt;/th>
+&lt;th>iptables&lt;/th>
+&lt;th>nftables&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>backend&lt;/td>
+&lt;td>x_tables&lt;/td>
+&lt;td>nf_tables&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>таблицы&lt;/td>
+&lt;td>filter, nat, mangle, raw, security&lt;/td>
+&lt;td>произвольные, named&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>family&lt;/td>
+&lt;td>один на v4 (ip6tables на v6)&lt;/td>
+&lt;td>inet, ip, ip6, arp, bridge, netdev&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>atomic update&lt;/td>
+&lt;td>нет, правило за правилом&lt;/td>
+&lt;td>да, через transactions&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>sets/maps&lt;/td>
+&lt;td>ipset (внешний)&lt;/td>
+&lt;td>встроены&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>статус&lt;/td>
+&lt;td>legacy с RHEL 9 / kernel 5.x&lt;/td>
+&lt;td>default везде&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>conntrack&lt;span class="hx:absolute hx:-mt-20" id="conntrack">&lt;/span>
 &lt;a href="#conntrack" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;p>&lt;code>/proc/net/nf_conntrack&lt;/code> - state table.&lt;/p>
 &lt;p>States. NEW, ESTABLISHED, RELATED, INVALID, UNTRACKED.&lt;/p>
-&lt;p>| sysctl | Что |
-| &lt;code>net.netfilter.nf_conntrack_max&lt;/code> | размер таблицы |
-| &lt;code>net.netfilter.nf_conntrack_tcp_timeout_established&lt;/code> | дефолт 5 дней |
-| &lt;code>net.netfilter.nf_conntrack_buckets&lt;/code> | bucket count для hashtable |&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>sysctl&lt;/th>
+&lt;th>Что&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>net.netfilter.nf_conntrack_max&lt;/code>&lt;/td>
+&lt;td>размер таблицы&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>net.netfilter.nf_conntrack_tcp_timeout_established&lt;/code>&lt;/td>
+&lt;td>дефолт 5 дней&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>net.netfilter.nf_conntrack_buckets&lt;/code>&lt;/td>
+&lt;td>bucket count для hashtable&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
 &lt;h2>NAT&lt;span class="hx:absolute hx:-mt-20" id="nat">&lt;/span>
 &lt;a href="#nat" class="subheading-anchor" aria-label="Постоянная ссылка на этот раздел">&lt;/a>&lt;/h2>&lt;ul>
 &lt;li>SNAT/DNAT в PREROUTING/POSTROUTING&lt;/li>
